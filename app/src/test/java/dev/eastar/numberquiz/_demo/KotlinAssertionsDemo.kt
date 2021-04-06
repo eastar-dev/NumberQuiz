@@ -1,12 +1,13 @@
 package dev.eastar.numberquiz._demo
 
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.Duration
 import kotlin.time.ExperimentalTime
-
+@Disabled
 class KotlinAssertionsDemo {
 
     private val person = Person("Jane", "Doe")

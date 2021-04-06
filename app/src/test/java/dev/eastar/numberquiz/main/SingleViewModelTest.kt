@@ -1,19 +1,16 @@
 package dev.eastar.numberquiz.main
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
-import dev.eastar.numberquiz.main.SingleViewModel
+import dev.eastar.tdd.InstantExecutorExtension
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is
-import org.junit.Assert.*
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun tryNumber() {
@@ -38,5 +35,5 @@ class SingleViewModelTest {
 }
 
 class GameRepositoryFack : GameRepository {
-    override fun generateRandomNumber() =1
+    override fun generateRandomNumber() = 1
 }

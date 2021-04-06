@@ -1,10 +1,13 @@
 package dev.eastar.numberquiz._demo
 
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.time.Duration.ofMillis
 import java.time.Duration.ofMinutes
 
+
+@Disabled
 internal class AssertionsDemo {
 
     private val calculator = Calculator()

@@ -1,27 +1,16 @@
 package dev.eastar.numberquiz.main
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import dev.eastar.numberquiz.main.MainViewModel
+import dev.eastar.tdd.InstantExecutorExtension
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is.`is`
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.Assert
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(InstantExecutorExtension::class)
 class MainViewModelTest {
-
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
-
-    @Before
-    fun setUp() {
-    }
-
-    @After
-    fun tearDown() {
-    }
 
     @Test
     fun exit() {
@@ -41,34 +30,33 @@ class MainViewModelTest {
 
     @Test
     fun startSinglePlay() {
-        //val mainViewModel = MainViewModel()
-        //mainViewModel.startSinglePlay()
-        //
-        //val observer = Observer<Class<out Fragment>> {}
-        //try {
-        //    val value = mainViewModel.moveFragment.value
-        //    //MatcherAssert.assertThat(value, `is`(SingleFr::class))
-        //    Assert.assertEquals(value, SingleFr::class)
-        //
-        //} finally {
-        //    // Whatever happens, don't forget to remove the observer!
-        //    mainViewModel.moveFragment.removeObserver(observer)
-        //}
+        val mainViewModel = MainViewModel()
+        mainViewModel.startSinglePlay()
+
+        val observer = Observer<Class<out Fragment>> {}
+        try {
+            val value = mainViewModel.moveFragment.value
+//            MatcherAssert.assertThat("way not ? ",value, `is`(SingleFr::class) )
+            Assert.assertEquals(value, SingleFr::class.java)
+
+        } finally {
+            // Whatever happens, don't forget to remove the observer!
+            mainViewModel.moveFragment.removeObserver(observer)
+        }
     }
 
     @Test
     fun startMultiPlay() {
-        //val mainViewModel = MainViewModel()
-        //mainViewModel.startMultiPlay()
-        //
-        //val observer = Observer<Class<out Fragment>> {}
-        //try {
-        //    val value = mainViewModel.moveFragment.value
-        //    MatcherAssert.assertThat(value, `is`(MultiFr::class))
-        //
-        //} finally {
-        //    // Whatever happens, don't forget to remove the observer!
-        //    mainViewModel.moveFragment.removeObserver(observer)
-        //}
+        val mainViewModel = MainViewModel()
+        mainViewModel.startMultiPlay()
+
+        val observer = Observer<Class<out Fragment>> {}
+        try {
+            val value = mainViewModel.moveFragment.value
+            Assert.assertEquals(value, MultiFr::class.java)
+        } finally {
+            // Whatever happens, don't forget to remove the observer!
+            mainViewModel.moveFragment.removeObserver(observer)
+        }
     }
 }

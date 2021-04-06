@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions.*
 
 class GeneratorRandomNumberSourceImplTest {
 
-    @org.junit.Test
+    @Test
     fun getRandomNumber1between100() {
         //given
         val generatorRandomNumberSource = GeneratorRandomNumberSourceImpl()
@@ -22,7 +22,7 @@ class GeneratorRandomNumberSourceImplTest {
         }
     }
 
-    @org.junit.Test
+    @Test
     fun getManyRandomNumberMin1Max100() {
         //given
         val generatorRandomNumberSource = GeneratorRandomNumberSourceImpl()

@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz
+package dev.eastar.numberquiz._demo
 
 import org.junit.jupiter.api.*
 import org.junit.jupiter.params.ParameterizedTest

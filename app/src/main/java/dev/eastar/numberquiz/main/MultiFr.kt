@@ -6,15 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import dev.eastar.numberquiz.R
+import dagger.hilt.android.AndroidEntryPoint
 import dev.eastar.numberquiz.databinding.MultiFrBinding
+import dev.eastar.numberquiz.databinding.SingleFrBinding
 
+@AndroidEntryPoint
 class MultiFr : Fragment() {
-
-    companion object {
-        fun newInstance() = MultiFr()
-    }
-
     private lateinit var bb: MultiFrBinding
     private val viewModel: MultiViewModel by viewModels()
 
@@ -25,6 +22,7 @@ class MultiFr : Fragment() {
     ): View {
         bb = MultiFrBinding.inflate(inflater, container, false)
         bb.viewmodel = viewModel
-        return inflater.inflate(R.layout.multi_fr, container, false)
+        bb.lifecycleOwner = this
+        return bb.root
     }
 }

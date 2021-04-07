@@ -149,7 +149,3 @@ class SingleViewModelTest {
         }
     }
 }
-
-class GameRepositoryFack : GameRepository {
-    override fun generateRandomNumber() = 5
-}

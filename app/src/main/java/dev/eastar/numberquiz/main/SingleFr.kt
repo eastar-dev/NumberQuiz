@@ -14,11 +14,6 @@ import dev.eastar.numberquiz.databinding.SingleFrBinding
 
 @AndroidEntryPoint
 class SingleFr : Fragment() {
-
-    companion object {
-        fun newInstance() = SingleFr()
-    }
-
     private lateinit var bb: SingleFrBinding
     private val viewModel: SingleViewModel by viewModels()
 

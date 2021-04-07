@@ -12,15 +12,8 @@ class SingleViewModel constructor(private val gameRepository: GameRepository) : 
     val gameResult = MutableLiveData<GameResult>()
 
     fun tryNumber(number: Int) {
-        signumTest(this.number - number)
-
-
-//        if (number > this.number)
-//            gameResult.value = GameResult.high
-//        if (number < this.number)
-//            gameResult.value = GameResult.low
-//        if (number == this.number)
-//            gameResult.value = GameResult.correct
+        val result = signumTest(number)
+        gameResult.value = GameResult.values()[result + 1]
     }
 
     @VisibleForTesting

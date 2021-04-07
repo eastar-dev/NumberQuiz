@@ -86,36 +86,16 @@ class MultiViewModelTest {
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
-        viewModel.tryingNumber.value = "5"
-        viewModel.tryNumber()
+        viewModel.members.value = arrayOf("성춘향", "변사또")
 
-        try {
-            //then
-            val actual = viewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다. 총시도 횟수는 1번 입니다."))
-
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            viewModel.gameEnd.removeObserver(observer)
-        }
-    }
-
-    @Test
-    fun tryNumber_correct2() {
-        //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
-        //when
-        val observer = Observer<String> {}
-        viewModel.gameEnd.observeForever(observer)
         arrayOf("1", "5").forEach {
             viewModel.tryingNumber.value = it
             viewModel.tryNumber()
         }
-
         try {
             //then
             val actual = viewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다. 총시도 횟수는 2번 입니다."))
+            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 변사또 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
@@ -123,27 +103,50 @@ class MultiViewModelTest {
         }
     }
 
-    @Test
-    fun tryNumber_correct3() {
-        //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
-        //when
-        val observer = Observer<String> {}
-        viewModel.gameEnd.observeForever(observer)
-        arrayOf("1", "2", "5").forEach {
-            viewModel.tryingNumber.value = it
-            viewModel.tryNumber()
-        }
+//    @Test
+//    fun tryNumber_correct2() {
+//        //given
+//        val viewModel = MultiViewModel(GameRepositoryFack())
+//        //when
+//        val observer = Observer<String> {}
+//        viewModel.gameEnd.observeForever(observer)
+//        arrayOf("1", "5").forEach {
+//            viewModel.tryingNumber.value = it
+//            viewModel.tryNumber()
+//        }
+//
+//        try {
+//            //then
+//            val actual = viewModel.gameEnd.value
+//            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다. 총시도 횟수는 2번 입니다."))
+//
+//        } finally {
+//            // Whatever happens, don't forget to remove the observer!
+//            viewModel.gameEnd.removeObserver(observer)
+//        }
+//    }
 
-        try {
-            //then
-            val actual = viewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다. 총시도 횟수는 3번 입니다."))
-
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            viewModel.gameEnd.removeObserver(observer)
-        }
-    }
+//    @Test
+//    fun tryNumber_correct3() {
+//        //given
+//        val viewModel = MultiViewModel(GameRepositoryFack())
+//        //when
+//        val observer = Observer<String> {}
+//        viewModel.gameEnd.observeForever(observer)
+//        arrayOf("1", "2", "5").forEach {
+//            viewModel.tryingNumber.value = it
+//            viewModel.tryNumber()
+//        }
+//
+//        try {
+//            //then
+//            val actual = viewModel.gameEnd.value
+//            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 변사또 입니다."))
+//
+//        } finally {
+//            // Whatever happens, don't forget to remove the observer!
+//            viewModel.gameEnd.removeObserver(observer)
+//        }
+//    }
 }
 

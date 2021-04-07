@@ -3,10 +3,9 @@ package dev.eastar.numberquiz.main
 import androidx.lifecycle.Observer
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
-import dev.eastar.tdd.InstantExecutorExtension
+import dev.eastar.numberquiz.InstantExecutorExtension
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
-import org.hamcrest.core.Is
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -19,12 +18,12 @@ class SingleViewModelTest {
         val singleViewModel = SingleViewModel(GameRepositoryFack())
         //when
         val observer = Observer<GameResult> {}
-        singleViewModel.tryNumber(10, "")
         singleViewModel.gameResult.observeForever(observer)
+        singleViewModel.tryNumber(10)
 
         try {
             //then
-            val gameResult = GameResult()
+            val gameResult = GameResult.high
             val actual = singleViewModel.gameResult.value
             MatcherAssert.assertThat(actual, `is`(gameResult))
 

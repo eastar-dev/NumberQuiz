@@ -10,7 +10,8 @@ class SingleViewModel constructor(private val gameRepository: GameRepository) : 
 
     val gameResult = MutableLiveData<GameResult>()
 
-    fun tryNumber(number: Int, who: String = "") {
+    fun tryNumber(number: Int) {
+        gameResult.value = GameResult.high
     }
 }
 

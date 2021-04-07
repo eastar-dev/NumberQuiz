@@ -1,4 +1,4 @@
-package dev.eastar.tdd
+package dev.eastar.numberquiz
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor

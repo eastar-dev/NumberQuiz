@@ -1,3 +1,5 @@
 package dev.eastar.numberquiz.data
 
-class GameResult
+enum class GameResult {
+    low, high, correct
+}

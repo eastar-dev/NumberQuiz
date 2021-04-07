@@ -17,7 +17,7 @@ class SingleViewModel @Inject constructor(gameRepository: GameRepository) : View
     }
 
     val gameResult = MutableLiveData<GameResult>()
-    val gameEnd = MutableLiveData<String>()
+    val gameEnd = MutableLiveData<String>("축하합니다. 총시도 횟수는 1번 입니다.")
     val tryingNumber = MutableLiveData<String>()
 
     fun tryNumber() {

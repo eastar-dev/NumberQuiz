@@ -16,7 +16,6 @@ class SingleViewModel @Inject constructor(private val gameRepository: GameReposi
 
     init {
         Log.e("generateRandomNumber", number)
-
     }
 
     val gameResult = MutableLiveData<GameResult>()

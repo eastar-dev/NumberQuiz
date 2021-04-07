@@ -6,22 +6,28 @@ import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
+    @BeforeEach
+    fun init() {
+        android.log.Log.outputSystem()
+    }
 
     @ParameterizedTest
     @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
-    fun tryNumber(number: Int, result: Int) {
+    fun tryNumber(number: String, result: Int) {
         //given
         val singleViewModel = SingleViewModel(GameRepositoryFack())
         //when
         val observer = Observer<GameResult> {}
         singleViewModel.gameResult.observeForever(observer)
-        singleViewModel.tryNumber(number)
+        singleViewModel.tryingNumber.value = number
+        singleViewModel.tryNumber()
 
         try {
             //then

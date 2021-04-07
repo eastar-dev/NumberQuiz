@@ -10,10 +10,8 @@ import dev.eastar.numberquiz.data.repo.GameRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class SingleViewModel @Inject constructor(private val gameRepository: GameRepository) :
-    ViewModel() {
-    val number = gameRepository.generateRandomNumber()
-
+class SingleViewModel @Inject constructor(gameRepository: GameRepository) : ViewModel() {
+    private val number = gameRepository.generateRandomNumber()
     init {
         Log.e("generateRandomNumber", number)
     }
@@ -22,6 +20,7 @@ class SingleViewModel @Inject constructor(private val gameRepository: GameReposi
     val tryingNumber = MutableLiveData<String>()
 
     fun tryNumber() {
+        Log.e(tryingNumber.value, number)
         val tryingNumber = tryingNumber.runCatching {
             value?.toInt()
         }.getOrNull()
@@ -29,6 +28,7 @@ class SingleViewModel @Inject constructor(private val gameRepository: GameReposi
 
         val result = signumTest(tryingNumber)
         gameResult.value = GameResult.values()[result + 1]
+        Log.w(gameResult.value)
     }
 
     @VisibleForTesting

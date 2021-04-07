@@ -5,5 +5,6 @@ import androidx.databinding.BindingAdapter
 
 @BindingAdapter("select")
 fun View.isSelect(isSelect: Boolean) {
+//    Log.e(this, isSelect)
     isSelected = isSelect
 }

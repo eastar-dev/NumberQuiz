@@ -24,6 +24,7 @@ class Main : AppCompatActivity() {
         }
 
         viewModel.moveFragment.observe(this) { clz ->
+            android.log.Log.e(clz)
             supportFragmentManager.commit { replace(R.id.container, clz.newInstance()) }
         }
     }

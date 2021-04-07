@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
     id 'de.mannodermaus.android-junit5'
 }
 
@@ -76,4 +77,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
     testImplementation 'org.jetbrains.kotlin:kotlin-reflect:1.4.32'
+
+    debugApi 'com.github.eastar-dev.EastarLog2:log:2.0.8'
+    releaseApi 'com.github.eastar-dev.EastarLog2:logNoOp:2.0.8'
 }

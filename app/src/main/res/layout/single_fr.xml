@@ -9,6 +9,7 @@
             name="viewmodel"
             type="dev.eastar.numberquiz.main.SingleViewModel" />
 
+        <import type="dev.eastar.numberquiz.data.GameResult" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,29 +18,37 @@
         android:layout_height="match_parent"
         tools:context=".main.MainFr">
 
-        <ImageButton
+        <TextView
             android:id="@+id/low"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="70dp"
-            android:contentDescription="낮음"
+            android:background="@drawable/low_high_bg"
+            android:drawableTop="@drawable/ic_low"
+            android:gravity="center"
             android:padding="16dp"
-            android:src="@drawable/ic_low"
+            android:text="낮음"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/high"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:select="@{viewmodel.gameResult == GameResult.low}" />
 
-        <ImageButton
+        <TextView
             android:id="@+id/high"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="높음"
+            android:background="@drawable/low_high_bg"
+            android:drawableTop="@drawable/ic_high"
+            android:gravity="center"
             android:padding="16dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_high"
+            android:text="높음"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/low"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/low"
-            app:layout_constraintTop_toTopOf="@id/low" />
+            app:select="@{viewmodel.gameResult == GameResult.high}" />
+
 
         <androidx.appcompat.widget.AppCompatEditText
             android:layout_width="match_parent"

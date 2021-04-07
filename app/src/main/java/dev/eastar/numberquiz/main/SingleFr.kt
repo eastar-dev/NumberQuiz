@@ -1,5 +1,6 @@
 package dev.eastar.numberquiz.main
 
+import android.log.Log
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,5 +34,11 @@ class SingleFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        viewModel.signumTest(1)
+        bb.tryingNumber.setOnEditorActionListener { v, actionId, event ->
+            Log.e(v, actionId, event)
+            viewModel.tryNumber()
+            bb.tryingNumber.setSelection(0,bb.tryingNumber.text.toString().length)
+            true
+        }
     }
 }

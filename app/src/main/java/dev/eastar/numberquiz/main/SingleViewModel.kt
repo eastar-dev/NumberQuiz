@@ -3,10 +3,13 @@ package dev.eastar.numberquiz.main
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
+import javax.inject.Inject
 
-class SingleViewModel constructor(private val gameRepository: GameRepository) : ViewModel() {
+@HiltViewModel
+class SingleViewModel @Inject constructor(private val gameRepository: GameRepository) : ViewModel() {
     val number = gameRepository.generateRandomNumber()
 
     val gameResult = MutableLiveData<GameResult>()

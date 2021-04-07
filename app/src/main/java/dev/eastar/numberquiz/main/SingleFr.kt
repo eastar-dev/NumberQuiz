@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import dev.eastar.numberquiz.R
 import dev.eastar.numberquiz.databinding.SingleFrBinding
 
+@AndroidEntryPoint
 class SingleFr : Fragment() {
 
     companion object {

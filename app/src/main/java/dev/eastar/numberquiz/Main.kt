@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import dev.eastar.numberquiz.main.MainFr
 import dev.eastar.numberquiz.main.MainViewModel
 
+@AndroidEntryPoint
 class Main : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()

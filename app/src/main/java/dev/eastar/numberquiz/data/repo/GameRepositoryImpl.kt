@@ -1,7 +1,10 @@
 package dev.eastar.numberquiz.data.repo
 
-class GameRepositoryImpl : GameRepository {
+import dev.eastar.numberquiz.data.source.GeneratorRandomNumberSource
+
+class GameRepositoryImpl(private val generatorRandomNumberSource: GeneratorRandomNumberSource) :
+    GameRepository {
     override fun generateRandomNumber(): Int {
-        TODO("Not yet implemented")
+        return generatorRandomNumberSource.getRandomNumber1between100()
     }
 }

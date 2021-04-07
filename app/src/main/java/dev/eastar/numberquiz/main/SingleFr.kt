@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import dev.eastar.ktx.alert
+import dev.eastar.ktx.positiveButton
 import dev.eastar.numberquiz.databinding.SingleFrBinding
 
 @AndroidEntryPoint
@@ -34,6 +36,14 @@ class SingleFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        viewModel.signumTest(1)
+        onLoadOnce()
+    }
+
+    private fun onLoadOnce() {
+        viewModel.gameEnd.observe(viewLifecycleOwner) {
+            alert(it) { positiveButton("OK") }
+        }
+
         bb.tryingNumber.setOnEditorActionListener { v, actionId, event ->
             Log.e(v, actionId, event)
             viewModel.tryNumber()

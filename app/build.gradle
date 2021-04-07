@@ -92,4 +92,6 @@ dependencies {
     //log
     debugApi 'com.github.eastar-dev.EastarLog2:log:2.0.8'
     releaseApi 'com.github.eastar-dev.EastarLog2:logNoOp:2.0.8'
+    //ktx
+    implementation 'com.github.eastar-dev:EastarKtx:1.1.3'
 }

@@ -20,7 +20,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
 
     val gameResult = MutableLiveData<GameResult>()
     val gameEnd = MutableLiveData<String>()
-    val members = MutableLiveData<Array<String>>()
+    val members = MutableLiveData<Array<String>>(arrayOf("성춘향", "변사또"))
     val tryingNumber = MutableLiveData<String>()
 
     fun tryNumber() {

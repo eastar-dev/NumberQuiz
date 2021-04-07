@@ -126,28 +126,5 @@ class MultiViewModelTest {
             viewModel.gameEnd.removeObserver(observer)
         }
     }
-
-//    @Test
-//    fun tryNumber_correct3() {
-//        //given
-//        val viewModel = MultiViewModel(GameRepositoryFack())
-//        //when
-//        val observer = Observer<String> {}
-//        viewModel.gameEnd.observeForever(observer)
-//        arrayOf("1", "2", "5").forEach {
-//            viewModel.tryingNumber.value = it
-//            viewModel.tryNumber()
-//        }
-//
-//        try {
-//            //then
-//            val actual = viewModel.gameEnd.value
-//            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 변사또 입니다."))
-//
-//        } finally {
-//            // Whatever happens, don't forget to remove the observer!
-//            viewModel.gameEnd.removeObserver(observer)
-//        }
-//    }
 }
 

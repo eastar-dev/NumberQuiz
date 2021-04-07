@@ -2,6 +2,7 @@ package dev.eastar.numberquiz._demo
 
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assumptions.assumeTrue
+
 @Disabled
 class StandardTests {
 

@@ -1,12 +1,9 @@
 package dev.eastar.numberquiz.data.source
 
-import dev.eastar.numberquiz.data.source.GeneratorRandomNumberSourceImpl
 import org.hamcrest.MatcherAssert
 import org.hamcrest.collection.IsIn
 import org.hamcrest.core.Is
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 class GeneratorRandomNumberSourceImplTest {
 

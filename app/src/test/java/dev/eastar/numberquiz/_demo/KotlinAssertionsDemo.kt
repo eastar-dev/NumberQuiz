@@ -7,6 +7,7 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.Duration
 import kotlin.time.ExperimentalTime
+
 @Disabled
 class KotlinAssertionsDemo {
 

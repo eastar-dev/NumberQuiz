@@ -20,9 +20,15 @@ class SingleViewModel @Inject constructor(private val gameRepository: GameReposi
     }
 
     val gameResult = MutableLiveData<GameResult>()
+    val tryingNumber = MutableLiveData<String>()
 
-    fun tryNumber(number: Int) {
-        val result = signumTest(number)
+    fun tryNumber() {
+        val tryingNumber = tryingNumber.runCatching {
+            value?.toInt()
+        }.getOrNull()
+        tryingNumber ?: return
+
+        val result = signumTest(tryingNumber)
         gameResult.value = GameResult.values()[result + 1]
     }
 

@@ -51,13 +51,14 @@
 
 
         <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/tryingNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:gravity="center"
             android:hint="1~100 사이의 숫자를 입력하세요"
             android:textSize="24dp"
-            android:text="@={viewmodel.tringNumber}"
+            android:text="@={viewmodel.tryingNumber}"
             app:layout_constraintBottom_toTopOf="@+id/confirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="try"
-            android:onClick="@{viewmodel.tryNumber()}"
+            android:onClick="@{()->viewmodel.tryNumber()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

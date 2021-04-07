@@ -30,9 +30,11 @@ class SingleViewModel @Inject constructor(gameRepository: GameRepository) : View
         tryingNumber ?: return
 
         val result = signumTest(tryingNumber)
-        gameResult.value = GameResult.values()[result + 1]
+        val lowHigh = GameResult.values()[result + 1]
+        gameResult.value = lowHigh
         tryCount++
-        gameEnd.value = "축하합니다. 총시도 횟수는 ${tryCount}번 입니다."
+        if(lowHigh == GameResult.correct)
+            gameEnd.value = "축하합니다. 총시도 횟수는 ${tryCount}번 입니다."
         Log.w(gameResult.value)
     }
 

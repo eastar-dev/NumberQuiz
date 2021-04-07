@@ -30,6 +30,6 @@ class SingleFr : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.signumTest(1)
+//        viewModel.signumTest(1)
     }
 }

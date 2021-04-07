@@ -6,7 +6,6 @@ import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -15,7 +14,7 @@ import org.junit.jupiter.params.provider.CsvSource
 class SingleViewModelTest {
 
     @ParameterizedTest
-    @CsvSource(value = ["1,0", "2,0"])
+    @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
     fun tryNumber(number: Int, result: Int) {
         //given
         val singleViewModel = SingleViewModel(GameRepositoryFack())
@@ -36,14 +35,16 @@ class SingleViewModelTest {
         }
     }
 
-    @Test
-    fun signmunTest() {
+    //    @ValueSource(ints = [1,3,5,7,9])
+    @ParameterizedTest
+    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
+    fun signmunTest(number: Int, result: Int) {
         //given
         val singleViewModel = SingleViewModel(GameRepositoryFack())
         //when
-        val actual = singleViewModel.signumTest(3)
+        val actual = singleViewModel.signumTest(number)
         //then
-        MatcherAssert.assertThat(actual, `is`(-1))
+        MatcherAssert.assertThat(actual, `is`(result))
 
     }
 }

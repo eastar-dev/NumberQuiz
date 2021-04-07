@@ -6,17 +6,44 @@ import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.mockito.internal.matchers.Null
+import java.util.*
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
     @BeforeEach
     fun init() {
         android.log.Log.outputSystem()
+    }
+
+    @Test
+    fun tryNumber() {
+        //given
+        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        //when
+        val observer = Observer<GameResult> {}
+        singleViewModel.gameResult.observeForever(observer)
+        singleViewModel.tryingNumber.value = "1"
+        singleViewModel.tryNumber()
+
+        try {
+            //then
+            val gameResult = GameResult.low
+            val actual = singleViewModel.gameResult.value
+            val actual2 = singleViewModel.gameEnd.value
+            MatcherAssert.assertThat(actual, `is`(gameResult))
+            MatcherAssert.assertThat(actual2, `is`(nullValue()))
+
+        } finally {
+            // Whatever happens, don't forget to remove the observer!
+            singleViewModel.gameResult.removeObserver(observer)
+        }
     }
 
     @ParameterizedTest

@@ -34,8 +34,12 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         val lowHigh = GameResult.values()[result + 1]
         gameResult.value = lowHigh
         tryCount++
-        if(lowHigh == GameResult.correct)
-            gameEnd.value = "축하합니다.\n승자는 변사또 입니다."
+        if (lowHigh == GameResult.correct) {
+            members.value ?: return
+            val members = members.value!!
+            val winner = members[tryCount % members.size]
+            gameEnd.value = "축하합니다.\n승자는 $winner 입니다."
+        }
         Log.w(gameResult.value)
     }
 

@@ -88,7 +88,7 @@ class MultiViewModelTest {
         viewModel.gameEnd.observeForever(observer)
         viewModel.members.value = arrayOf("성춘향", "변사또")
 
-        arrayOf("1", "5").forEach {
+        arrayOf("5").forEach {
             viewModel.tryingNumber.value = it
             viewModel.tryNumber()
         }

@@ -99,6 +99,28 @@ class SingleViewModelTest {
         }
     }
 
+    @Test
+    fun tryNumber_correct3() {
+        //given
+        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        //when
+        val observer = Observer<String> {}
+        singleViewModel.gameEnd.observeForever(observer)
+        arrayOf("1", "2", "5").forEach {
+            singleViewModel.tryingNumber.value = it
+            singleViewModel.tryNumber()
+        }
+
+        try {
+            //then
+            val actual = singleViewModel.gameEnd.value
+            MatcherAssert.assertThat(actual, `is`("축하합니다. 총시도 횟수는 3번 입니다."))
+
+        } finally {
+            // Whatever happens, don't forget to remove the observer!
+            singleViewModel.gameEnd.removeObserver(observer)
+        }
+    }
 }
 
 class GameRepositoryFack : GameRepository {

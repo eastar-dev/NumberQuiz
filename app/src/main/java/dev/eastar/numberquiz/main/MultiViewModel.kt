@@ -35,7 +35,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         gameResult.value = lowHigh
         tryCount++
         if(lowHigh == GameResult.correct)
-            gameEnd.value = "축하합니다. 총시도 횟수는 ${tryCount}번 입니다."
+            gameEnd.value = "축하합니다.\n승자는 변사또 입니다."
         Log.w(gameResult.value)
     }
 

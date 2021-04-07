@@ -4,6 +4,7 @@ import androidx.lifecycle.Observer
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import dev.eastar.tdd.InstantExecutorExtension
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is
 import org.junit.jupiter.api.Test
@@ -25,7 +26,7 @@ class SingleViewModelTest {
             //then
             val gameResult = GameResult()
             val actual = singleViewModel.gameResult.value
-            MatcherAssert.assertThat(actual, Is.`is`(gameResult))
+            MatcherAssert.assertThat(actual, `is`(gameResult))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!

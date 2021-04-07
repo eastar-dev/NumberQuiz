@@ -11,13 +11,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SingleViewModel @Inject constructor(gameRepository: GameRepository) : ViewModel() {
+    private var tryCount: Int = 0
     private val number = gameRepository.generateRandomNumber()
+
     init {
         Log.e("generateRandomNumber", number)
     }
 
     val gameResult = MutableLiveData<GameResult>()
-    val gameEnd = MutableLiveData<String>("축하합니다. 총시도 횟수는 1번 입니다.")
+    val gameEnd = MutableLiveData<String>()
     val tryingNumber = MutableLiveData<String>()
 
     fun tryNumber() {
@@ -29,6 +31,8 @@ class SingleViewModel @Inject constructor(gameRepository: GameRepository) : View
 
         val result = signumTest(tryingNumber)
         gameResult.value = GameResult.values()[result + 1]
+        tryCount++
+        gameEnd.value = "축하합니다. 총시도 횟수는 ${tryCount}번 입니다."
         Log.w(gameResult.value)
     }
 

@@ -27,4 +27,9 @@ class SingleFr : Fragment() {
         bb.viewmodel = viewModel
         return inflater.inflate(R.layout.single_fr, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.signumTest(1)
+    }
 }

@@ -1,5 +1,6 @@
 package dev.eastar.numberquiz.main
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.eastar.numberquiz.data.GameResult
@@ -22,7 +23,8 @@ class SingleViewModel constructor(private val gameRepository: GameRepository) : 
             gameResult.value = GameResult.correct
     }
 
-    private fun signmunTest(number: Int): Int {
+    @VisibleForTesting
+    fun signumTest(number: Int): Int {
         return Integer.signum(number - this.number)
     }
 }

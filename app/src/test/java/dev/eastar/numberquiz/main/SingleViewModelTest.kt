@@ -6,6 +6,7 @@ import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -33,6 +34,17 @@ class SingleViewModelTest {
             // Whatever happens, don't forget to remove the observer!
             singleViewModel.gameResult.removeObserver(observer)
         }
+    }
+
+    @Test
+    fun signmunTest() {
+        //given
+        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        //when
+        val actual = singleViewModel.signumTest(3)
+        //then
+        MatcherAssert.assertThat(actual, `is`(-1))
+
     }
 }
 

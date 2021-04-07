@@ -7,6 +7,7 @@ import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -52,6 +53,27 @@ class SingleViewModelTest {
         //then
         MatcherAssert.assertThat(actual, `is`(result))
 
+    }
+
+    @Test
+    fun tryNumber_correct() {
+        //given
+        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        //when
+        val observer = Observer<String> {}
+        singleViewModel.gameEnd.observeForever(observer)
+        singleViewModel.tryingNumber.value = "5"
+        singleViewModel.tryNumber()
+
+        try {
+            //then
+            val actual = singleViewModel.gameEnd.value
+            MatcherAssert.assertThat(actual, `is`("축하합니다. 총시도 횟수는 1번 입니다."))
+
+        } finally {
+            // Whatever happens, don't forget to remove the observer!
+            singleViewModel.gameEnd.removeObserver(observer)
+        }
     }
 }
 

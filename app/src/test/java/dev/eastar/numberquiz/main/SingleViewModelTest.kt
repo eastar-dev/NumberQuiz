@@ -1,29 +1,31 @@
 package dev.eastar.numberquiz.main
 
 import androidx.lifecycle.Observer
+import dev.eastar.numberquiz.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
-import dev.eastar.numberquiz.InstantExecutorExtension
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
 
-    @Test
-    fun tryNumber() {
+    @ParameterizedTest
+    @CsvSource(value = ["1,0", "2,0"])
+    fun tryNumber(number: Int, result: Int) {
         //given
         val singleViewModel = SingleViewModel(GameRepositoryFack())
         //when
         val observer = Observer<GameResult> {}
         singleViewModel.gameResult.observeForever(observer)
-        singleViewModel.tryNumber(10)
+        singleViewModel.tryNumber(number)
 
         try {
             //then
-            val gameResult = GameResult.high
+            val gameResult = GameResult.values()[result]
             val actual = singleViewModel.gameResult.value
             MatcherAssert.assertThat(actual, `is`(gameResult))
 
@@ -35,5 +37,5 @@ class SingleViewModelTest {
 }
 
 class GameRepositoryFack : GameRepository {
-    override fun generateRandomNumber() = 1
+    override fun generateRandomNumber() = 5
 }

@@ -18,6 +18,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         Log.e("generateRandomNumber", number)
     }
 
+    val alert = MutableLiveData<String>("멀티 게임에서는 2명 이상의 player가 필요합니다.")
     val gameResult = MutableLiveData<GameResult>()
     val gameEnd = MutableLiveData<String>()
     val members = MutableLiveData<Array<String>>()

@@ -3,6 +3,7 @@ package dev.eastar.numberquiz.main
 import android.log.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.eastar.numberquiz.data.GameResult
@@ -22,6 +23,10 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
     val gameResult = MutableLiveData<GameResult>()
     val gameEnd = MutableLiveData<String>()
     val members = MutableLiveData<Array<String>>()
+    val membersEmpty = Transformations.map(members ){
+        if(it.isEmpty())
+            Unit
+    }
     val tryingNumber = MutableLiveData<String>()
 
     fun tryNumber() {

@@ -136,18 +136,18 @@ class MultiViewModelTest {
         val viewModel = MultiViewModel(GameRepositoryFack())
 
         //when
-        val observer = Observer<Array<String>> {}
-        viewModel.members.observeForever(observer)
+        val observer = Observer<Unit> {}
+        viewModel.membersEmpty.observeForever(observer)
         //nothing
         viewModel.checkMembers()
         //then
         try {
-            val actual = viewModel.members.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`(emptyArray()))
+            val actual = viewModel.membersEmpty.value
+            MatcherAssert.assertThat(actual, CoreMatchers.`is`(Unit))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.members.removeObserver(observer)
+            viewModel.membersEmpty.removeObserver(observer)
         }
     }
 

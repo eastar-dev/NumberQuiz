@@ -54,6 +54,7 @@ class MultiViewModelTest {
         val observer = Observer<GameResult> {}
         viewModel.gameResult.observeForever(observer)
         viewModel.tryingNumber.value = number
+        viewModel.members.value = arrayOf("성춘향,변사또")
         viewModel.tryNumber()
 
         try {
@@ -158,18 +159,18 @@ class MultiViewModelTest {
         val viewModel = MultiViewModel(GameRepositoryFack())
 
         //when
-        val observer = Observer<Array<String>> {}
-        viewModel.members.observeForever(observer)
+        val observer = Observer<String> {}
+        viewModel.members1Player.observeForever(observer)
         viewModel.members.value = arrayOf("성춘")
-        viewModel.checkMembers()
+//        viewModel.checkMembers()
         //then
         try {
-            val actual = viewModel.alert.value
+            val actual = viewModel.members1Player.value
             MatcherAssert.assertThat(actual, `is`("멀티 게임에서는 2명 이상의 player가 필요합니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.members.removeObserver(observer)
+            viewModel.members1Player.removeObserver(observer)
         }
     }
 }

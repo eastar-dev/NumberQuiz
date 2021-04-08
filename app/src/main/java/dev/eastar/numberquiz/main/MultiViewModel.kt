@@ -2,6 +2,7 @@ package dev.eastar.numberquiz.main
 
 import android.log.Log
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -15,19 +16,28 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
     private var tryCount: Int = 0
     private val number = gameRepository.generateRandomNumber()
 
-    init {
-        Log.e("generateRandomNumber", number)
-    }
 
-    val alert = MutableLiveData<String>("멀티 게임에서는 2명 이상의 player가 필요합니다.")
     val gameResult = MutableLiveData<GameResult>()
     val gameEnd = MutableLiveData<String>()
-    val members = MutableLiveData<Array<String>>()
-    val membersEmpty = Transformations.map(members ){
-        if(it.isEmpty())
-            Unit
+    val members = MutableLiveData<Array<String>>(emptyArray())
+    val membersEmpty: LiveData<Unit> = Transformations.switchMap(members) {
+        if (it.isEmpty())
+            MutableLiveData(Unit)
+        else
+            null
+    }
+    val members1Player: LiveData<String> = Transformations.switchMap(members) {
+        if (it.size == 1)
+            MutableLiveData("멀티 게임에서는 2명 이상의 player가 필요합니다.")
+        else
+            null
     }
     val tryingNumber = MutableLiveData<String>()
+
+    init {
+        Log.e("generateRandomNumber", number)
+        checkMembers()
+    }
 
     fun tryNumber() {
         Log.e(tryingNumber.value, number)
@@ -56,6 +66,10 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
 
     fun checkMembers() {
         members.value = emptyArray()
+    }
+
+    fun setMembers(members: String) {
+
     }
 }
 

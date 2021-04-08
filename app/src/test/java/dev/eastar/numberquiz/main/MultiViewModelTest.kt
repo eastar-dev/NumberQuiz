@@ -6,6 +6,7 @@ import dev.eastar.numberquiz.data.GameResult
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -143,6 +144,28 @@ class MultiViewModelTest {
         try {
             val actual = viewModel.members.value
             MatcherAssert.assertThat(actual, CoreMatchers.`is`(emptyArray()))
+
+        } finally {
+            // Whatever happens, don't forget to remove the observer!
+            viewModel.members.removeObserver(observer)
+        }
+    }
+
+    @Test
+    @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
+    fun setMembers_1player() {
+        //given
+        val viewModel = MultiViewModel(GameRepositoryFack())
+
+        //when
+        val observer = Observer<Array<String>> {}
+        viewModel.members.observeForever(observer)
+        viewModel.members.value = arrayOf("성춘")
+        viewModel.checkMembers()
+        //then
+        try {
+            val actual = viewModel.alert.value
+            MatcherAssert.assertThat(actual, `is`("멀티 게임에서는 2명 이상의 player가 필요합니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!

@@ -7,6 +7,7 @@ import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
@@ -124,6 +125,28 @@ class MultiViewModelTest {
         } finally {
             // Whatever happens, don't forget to remove the observer!
             viewModel.gameEnd.removeObserver(observer)
+        }
+    }
+
+    @Test
+    @DisplayName("Multi에서 입력받은유저가없으면 요청한다")
+    fun setMembers() {
+        //given
+        val viewModel = MultiViewModel(GameRepositoryFack())
+
+        //when
+        val observer = Observer<Array<String>> {}
+        viewModel.members.observeForever(observer)
+        //nothing
+        viewModel.checkMembers()
+        //then
+        try {
+            val actual = viewModel.members.value
+            MatcherAssert.assertThat(actual, CoreMatchers.`is`(emptyArray()))
+
+        } finally {
+            // Whatever happens, don't forget to remove the observer!
+            viewModel.members.removeObserver(observer)
         }
     }
 }

@@ -47,5 +47,9 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
     fun signumTest(number: Int): Int {
         return Integer.signum(number - this.number)
     }
+
+    fun checkMembers() {
+        TODO("Not yet implemented")
+    }
 }
 

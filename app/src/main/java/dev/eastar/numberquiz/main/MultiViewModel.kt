@@ -67,7 +67,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
 
     fun setMembers(membersText: String) {
         //case1
-//        members.value = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
+        members.value = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
         //case2
 //        members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
         //case3
@@ -75,9 +75,9 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
 //            members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
 //        }
         //case4
-        viewModelScope.launch {
-            members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
-        }
+//        viewModelScope.launch {
+//            members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
+//        }
     }
 }
 

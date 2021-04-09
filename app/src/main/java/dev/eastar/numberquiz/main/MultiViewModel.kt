@@ -38,6 +38,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
 
     init {
         Log.e("generateRandomNumber", number)
+        setMembers("")
 //        checkMembers()
     }
 

@@ -131,9 +131,9 @@ class MultiViewModelTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = arrayOf("", " ", ",", "  , , , ,", "\t   , , , ,",))
+    @ValueSource(strings = arrayOf("", " ", ",", "  , , , ,", "\t   , , , ,"))
     @DisplayName("""Multi에서 입력받은유저가""면 요청한다""")
-    fun setMembers_empty(input : String) {
+    fun setMembers_empty(input: String) {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
 
@@ -161,12 +161,9 @@ class MultiViewModelTest {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
         //when
-        val observer = Observer<Unit> {
-            Assertions.fail()
-        }
-        viewModel.membersEmpty.observeForever(observer)
+        val observer = Observer<Unit> { Assertions.fail() }
         viewModel.setMembers("성춘")
-
+        viewModel.membersEmpty.observeForever(observer)
 
         //then
         val actual = viewModel.membersEmpty.value

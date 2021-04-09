@@ -1,6 +1,11 @@
 package dev.eastar.numberquiz.main
 
+import android.util.mock
 import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import dev.eastar.numberquiz.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
@@ -9,11 +14,10 @@ import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.mockito.internal.matchers.Null
-import java.util.*
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
@@ -22,28 +26,32 @@ class SingleViewModelTest {
         android.log.Log.outputSystem()
     }
 
+
+    //https://greedy0110.tistory.com/57
     @Test
     fun tryNumber() {
         //given
-        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        val gameRepository: GameRepository = mock()
+        whenever(gameRepository.generateRandomNumber()).thenReturn(5)
+
+        val singleViewModel = SingleViewModel(gameRepository)
+        verify(gameRepository, times(1))
+//        MatcherAssert.assertThat(gameRepository.generateRandomNumber(), `is`(5))
+
         //when
-        val observer = Observer<GameResult> {}
-        singleViewModel.gameResult.observeForever(observer)
+        singleViewModel.gameResult.observeForever { }
+        singleViewModel.gameEnd.observeForever {}
         singleViewModel.tryingNumber.value = "1"
         singleViewModel.tryNumber()
 
-        try {
-            //then
-            val gameResult = GameResult.low
+        //then
+        assertAll({
             val actual = singleViewModel.gameResult.value
-            val actual2 = singleViewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, `is`(gameResult))
-            MatcherAssert.assertThat(actual2, `is`(nullValue()))
-
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            singleViewModel.gameResult.removeObserver(observer)
-        }
+            MatcherAssert.assertThat(actual, `is`(GameResult.low))
+        }, {
+            val actual = singleViewModel.gameEnd.value
+            MatcherAssert.assertThat(actual, `is`(nullValue()))
+        })
     }
 
     @ParameterizedTest

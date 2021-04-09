@@ -19,7 +19,9 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
 
     val gameResult = MutableLiveData<GameResult>()
     val gameEnd = MutableLiveData<String>()
-    val members = MutableLiveData<Array<String>>(emptyArray())
+    val tryingNumber = MutableLiveData<String>()
+
+    val members = MutableLiveData<Array<String>>()
     val membersEmpty: LiveData<Unit> = Transformations.switchMap(members) {
         if (it.isEmpty())
             MutableLiveData(Unit)
@@ -32,11 +34,11 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         else
             null
     }
-    val tryingNumber = MutableLiveData<String>()
+
 
     init {
         Log.e("generateRandomNumber", number)
-        checkMembers()
+//        checkMembers()
     }
 
     fun tryNumber() {
@@ -65,11 +67,11 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
     }
 
     fun checkMembers() {
-        members.value = emptyArray()
+//        members.value = emptyArray()
     }
 
-    fun setMembers(members: String) {
-
+    fun setMembers(membersText: String) {
+        members.value = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
     }
 }
 

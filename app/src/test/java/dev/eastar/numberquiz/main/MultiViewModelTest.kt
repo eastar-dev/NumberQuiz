@@ -12,6 +12,7 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.ValueSource
 
 @ExtendWith(InstantExecutorExtension::class)
 class MultiViewModelTest {
@@ -129,15 +130,16 @@ class MultiViewModelTest {
         }
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = arrayOf("", " ", ",", "  , , , ,", "\t   , , , ,",))
     @DisplayName("""Multi에서 입력받은유저가""면 요청한다""")
-    fun setMembers_empty() {
+    fun setMembers_empty(input : String) {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
 
         //when
         val observer = Observer<Unit> { Log.e("Observer") }
-        viewModel.setMembers("")
+        viewModel.setMembers(input)
         viewModel.membersEmpty.observeForever(observer)
 
         //then

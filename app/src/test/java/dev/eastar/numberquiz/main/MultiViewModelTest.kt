@@ -1,15 +1,15 @@
 package dev.eastar.numberquiz.main
 
+import android.log.Log
 import androidx.lifecycle.Observer
 import dev.eastar.numberquiz.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.`is`
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.CsvSource
 class MultiViewModelTest {
     @BeforeEach
     fun init() {
-        android.log.Log.outputSystem()
+        Log.outputSystem()
     }
 
     @Test
@@ -36,8 +36,8 @@ class MultiViewModelTest {
             val gameResult = GameResult.low
             val actual = viewModel.gameResult.value
             val actual2 = viewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`(gameResult))
-            MatcherAssert.assertThat(actual2, CoreMatchers.`is`(Matchers.nullValue()))
+            assertThat(actual, CoreMatchers.`is`(gameResult))
+            assertThat(actual2, CoreMatchers.`is`(Matchers.nullValue()))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
@@ -61,7 +61,7 @@ class MultiViewModelTest {
             //then
             val gameResult = GameResult.values()[result]
             val actual = viewModel.gameResult.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`(gameResult))
+            assertThat(actual, CoreMatchers.`is`(gameResult))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
@@ -78,7 +78,7 @@ class MultiViewModelTest {
         //when
         val actual = viewModel.signumTest(number)
         //then
-        MatcherAssert.assertThat(actual, CoreMatchers.`is`(result))
+        assertThat(actual, CoreMatchers.`is`(result))
 
     }
 
@@ -98,7 +98,7 @@ class MultiViewModelTest {
         try {
             //then
             val actual = viewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 변사또 입니다."))
+            assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 변사또 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
@@ -122,7 +122,7 @@ class MultiViewModelTest {
         try {
             //then
             val actual = viewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 성춘향 입니다."))
+            assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 성춘향 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
@@ -132,24 +132,45 @@ class MultiViewModelTest {
 
     @Test
     @DisplayName("Multi에서 입력받은유저가없으면 요청한다")
-    fun setMembers() {
+    fun setMembers_empty() {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
 
         //when
-        val observer = Observer<Unit> {}
+        val observer = Observer<Unit> { Log.e("Observer") }
+        viewModel.setMembers("")
         viewModel.membersEmpty.observeForever(observer)
-        //nothing
-        viewModel.checkMembers()
-        //then
-        try {
-            val actual = viewModel.membersEmpty.value
-            MatcherAssert.assertThat(actual, CoreMatchers.`is`(Unit))
 
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            viewModel.membersEmpty.removeObserver(observer)
+        //then
+        assertAll({
+            val actual = viewModel.membersEmpty.value
+            assertThat(actual, CoreMatchers.`is`(Unit))
+        }, {
+            val actual = viewModel.members.value
+            assertThat(actual, CoreMatchers.`is`(emptyArray()))
+        })
+
+
+        viewModel.membersEmpty.removeObserver(observer)
+    }
+
+    @Test
+    @DisplayName("Multi에서 입력받은유저가있으면 입력요청안한다")
+    fun setMembers_not_empty() = runBlocking {
+        //given
+        val viewModel = MultiViewModel(GameRepositoryFack())
+        //when
+        val observer = Observer<Unit> {
+            Assertions.fail()
         }
+        viewModel.membersEmpty.observeForever(observer)
+        viewModel.setMembers("성춘")
+
+
+        //then
+        val actual = viewModel.membersEmpty.value
+        Assertions.assertNull(actual)
+        viewModel.membersEmpty.removeObserver(observer)
     }
 
     @Test
@@ -161,17 +182,11 @@ class MultiViewModelTest {
         //when
         val observer = Observer<String> {}
         viewModel.members1Player.observeForever(observer)
-        viewModel.members.value = arrayOf("성춘")
-//        viewModel.checkMembers()
+        viewModel.setMembers("성춘향")
         //then
-        try {
-            val actual = viewModel.members1Player.value
-            MatcherAssert.assertThat(actual, `is`("멀티 게임에서는 2명 이상의 player가 필요합니다."))
-
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            viewModel.members1Player.removeObserver(observer)
-        }
+        val actual = viewModel.members1Player.value
+        assertThat(actual, `is`("멀티 게임에서는 2명 이상의 player가 필요합니다."))
+        viewModel.members1Player.removeObserver(observer)
     }
 }
 

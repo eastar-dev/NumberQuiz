@@ -2,13 +2,12 @@ package dev.eastar.numberquiz.main
 
 import android.log.Log
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,8 +21,8 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
     val tryingNumber = MutableLiveData<String>()
 
     val members = MutableLiveData<Array<String>>()
-    val membersEmpty: LiveData<Unit> = Transformations.switchMap(members) {
-        if (it.isEmpty())
+    val memberInput: LiveData<Unit> = Transformations.switchMap(members) {
+        if (it.size < 2)
             MutableLiveData(Unit)
         else
             null
@@ -39,7 +38,6 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
     init {
         Log.e("generateRandomNumber", number)
         setMembers("")
-//        checkMembers()
     }
 
     fun tryNumber() {
@@ -54,7 +52,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         gameResult.value = lowHigh
         tryCount++
         if (lowHigh == GameResult.correct) {
-            members.value ?: return
+            members.value?.getOrNull(0) ?: return
             val members = members.value!!
             val winner = members[tryCount % members.size]
             gameEnd.value = "축하합니다.\n승자는 $winner 입니다."
@@ -67,12 +65,19 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         return Integer.signum(number - this.number)
     }
 
-    fun checkMembers() {
-//        members.value = emptyArray()
-    }
-
     fun setMembers(membersText: String) {
-        members.value = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
+        //case1
+//        members.value = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
+        //case2
+//        members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
+        //case3
+//        Executors.newSingleThreadExecutor().execute {
+//            members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
+//        }
+        //case4
+        viewModelScope.launch {
+            members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
+        }
     }
 }
 

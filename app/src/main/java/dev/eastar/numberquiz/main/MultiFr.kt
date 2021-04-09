@@ -37,7 +37,7 @@ class MultiFr : Fragment() {
     }
 
     private fun onLoadOnce() {
-        viewModel.membersEmpty.observe(viewLifecycleOwner) {
+        viewModel.memberInput.observe(viewLifecycleOwner) {
             alert("참가자를 입력해주세요") {
                 val edit = EditText(context)
                 setView(edit)

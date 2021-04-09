@@ -4,7 +4,6 @@ import android.log.Log
 import androidx.lifecycle.Observer
 import dev.eastar.numberquiz.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
-import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
@@ -131,7 +130,7 @@ class MultiViewModelTest {
     }
 
     @Test
-    @DisplayName("Multi에서 입력받은유저가없으면 요청한다")
+    @DisplayName("""Multi에서 입력받은유저가""면 요청한다""")
     fun setMembers_empty() {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
@@ -156,7 +155,7 @@ class MultiViewModelTest {
 
     @Test
     @DisplayName("Multi에서 입력받은유저가있으면 입력요청안한다")
-    fun setMembers_not_empty() = runBlocking {
+    fun setMembers_not_empty() {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
         //when

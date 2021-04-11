@@ -36,13 +36,16 @@ class SingleFr : Fragment() {
 
     private fun onLoadOnce() {
         viewModel.gameEnd.observe(viewLifecycleOwner) {
-            alert(it) { positiveButton("OK") }
+            alert(it) {
+                positiveButton("OK")
+                setOnDismissListener { parentFragmentManager.popBackStack() }
+            }
         }
 
         bb.tryingNumber.setOnEditorActionListener { v, actionId, event ->
             Log.e(v, actionId, event)
             viewModel.tryNumber()
-            bb.tryingNumber.setSelection(0,bb.tryingNumber.text.toString().length)
+            bb.tryingNumber.setSelection(0, bb.tryingNumber.text.toString().length)
             true
         }
     }

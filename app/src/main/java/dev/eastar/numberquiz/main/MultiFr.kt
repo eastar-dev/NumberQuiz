@@ -44,7 +44,9 @@ class MultiFr : Fragment() {
                 positiveButton("OK") {
                     viewModel.setMembers(edit.text.toString())
                 }
-                negativeButton("CANCEL")
+                negativeButton("CANCEL") {
+                    parentFragmentManager.popBackStack()
+                }
             }
         }
         viewModel.members1Player.observe(viewLifecycleOwner) {
@@ -53,7 +55,10 @@ class MultiFr : Fragment() {
             }
         }
         viewModel.gameEnd.observe(viewLifecycleOwner) {
-            alert(it) { positiveButton("OK") }
+            alert(it) {
+                positiveButton("OK")
+                setOnDismissListener { parentFragmentManager.popBackStack() }
+            }
         }
 
         bb.tryingNumber.setOnEditorActionListener { v, actionId, event ->

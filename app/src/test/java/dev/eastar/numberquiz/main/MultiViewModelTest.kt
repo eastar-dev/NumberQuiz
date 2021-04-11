@@ -73,7 +73,7 @@ class MultiViewModelTest {
         val observer = Observer<GameResult> {}
         viewModel.gameResult.observeForever(observer)
         viewModel.tryingNumber.value = number
-        viewModel.members.value = arrayOf("성춘향,변사또")
+        viewModel.setMembers("성춘향,변사또")
         viewModel.tryNumber()
 
         try {
@@ -114,10 +114,11 @@ class MultiViewModelTest {
             viewModel.tryingNumber.value = it
             viewModel.tryNumber()
         }
+
         try {
             //then
             val actual = viewModel.gameEnd.value
-            assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 변사또 입니다."))
+            assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 성춘향 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
@@ -141,7 +142,7 @@ class MultiViewModelTest {
         try {
             //then
             val actual = viewModel.gameEnd.value
-            assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 성춘향 입니다."))
+            assertThat(actual, CoreMatchers.`is`("축하합니다.\n승자는 변사또 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
@@ -192,7 +193,7 @@ class MultiViewModelTest {
 
     @Test
     @DisplayName("Multi에서 입력받은유저가>2면 입력요청안한다")
-    fun setMembers_not_empty() {
+    fun setMembers_over2_member() {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
         //when

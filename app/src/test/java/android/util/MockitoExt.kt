@@ -17,11 +17,13 @@ package android.util
 
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito
+import org.mockito.stubbing.OngoingStubbing
 
 //https://github.com/android/architecture-components-samples/blob/master/GithubBrowserSample/app/src/test-common/java/com/android/example/github/util/MockitoExt.kt
-/**
- * a kotlin friendly mock that handles generics
- */
+/** a kotlin friendly mock that handles generics */
 inline fun <reified T> mock(): T = Mockito.mock(T::class.java)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> whenever(methodCall: T): OngoingStubbing<T> = Mockito.`when`(methodCall)
 
 //inline fun <reified T> argumentCaptor(): ArgumentCaptor<T> = ArgumentCaptor.forClass(T::class.java)

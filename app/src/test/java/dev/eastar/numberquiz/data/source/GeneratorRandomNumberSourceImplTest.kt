@@ -1,8 +1,9 @@
 package dev.eastar.numberquiz.data.source
 
+//import org.hamcrest.collection.IsIn
 import org.hamcrest.MatcherAssert
-import org.hamcrest.collection.IsIn
 import org.hamcrest.core.Is
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class GeneratorRandomNumberSourceImplTest {
@@ -15,7 +16,7 @@ class GeneratorRandomNumberSourceImplTest {
             //when
             val actual: Int = generatorRandomNumberSource.getRandomNumber1between100()
             //then
-            MatcherAssert.assertThat(actual, IsIn((0..100).toList()))
+            assertTrue(actual in 1..100)
         }
     }
 

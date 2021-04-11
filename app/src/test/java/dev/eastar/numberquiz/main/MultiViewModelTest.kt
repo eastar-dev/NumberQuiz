@@ -1,5 +1,8 @@
 package dev.eastar.numberquiz.main
 
+//import org.hamcrest.Matchers
+//import org.hamcrest.Matchers.`is`
+
 import android.log.Log
 import android.util.getOrAwaitValue
 import androidx.lifecycle.Observer
@@ -7,19 +10,23 @@ import dev.eastar.numberquiz.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.core.Is.`is`
+import org.hamcrest.core.IsNull.nullValue
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.function.ThrowingConsumer
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.EmptySource
 import org.junit.jupiter.params.provider.ValueSource
+import java.util.*
+import java.util.stream.Stream
+import kotlin.Function as Function1001
+
 
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantExecutorExtension::class)
@@ -56,7 +63,7 @@ class MultiViewModelTest {
             val actual = viewModel.gameResult.value
             val actual2 = viewModel.gameEnd.value
             assertThat(actual, CoreMatchers.`is`(gameResult))
-            assertThat(actual2, CoreMatchers.`is`(Matchers.nullValue()))
+            assertThat(actual2, CoreMatchers.`is`(nullValue()))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
@@ -152,9 +159,10 @@ class MultiViewModelTest {
 
     @ExperimentalCoroutinesApi
     @ParameterizedTest
-    @ValueSource(strings = arrayOf("", " ", ",", "  , , , ,", "\t   , , , ,"))
+    @EmptySource //"" test를 자동으로 해준다.
+    @ValueSource(strings = arrayOf(" ", ",", "  , , , ,", "\t   , , , ,"))
     @DisplayName("""Multi에서 입력받은유저가""면 요청한다""")
-    fun setMembers_empty(input: String) {
+    fun setMembers_empty(input: String?) {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
 
@@ -234,7 +242,7 @@ class MultiViewModelTest {
 
     @Test
     @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
-    fun setMembers_1player_case2() =testDispatcher.runBlockingTest {
+    fun setMembers_1player_case2() = testDispatcher.runBlockingTest {
         //given
         val viewModel = MultiViewModel(GameRepositoryFack())
 
@@ -253,5 +261,6 @@ class MultiViewModelTest {
             assertThat(actual, CoreMatchers.`is`(Unit))
         })
     }
+
 }
 

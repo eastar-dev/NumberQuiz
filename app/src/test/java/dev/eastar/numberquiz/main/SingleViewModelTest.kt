@@ -1,23 +1,28 @@
 package dev.eastar.numberquiz.main
 
+//import android.util.mock
+//import com.nhaarman.mockitokotlin2.mock
 import android.util.mock
+import android.util.whenever
 import androidx.lifecycle.Observer
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+//import com.nhaarman.mockitokotlin2.whenever
 import dev.eastar.numberquiz.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.mockito.Mockito
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
+
+//typealias wheneve = `when`
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
@@ -33,15 +38,15 @@ class SingleViewModelTest {
         //given
         val gameRepository: GameRepository = mock()
         whenever(gameRepository.generateRandomNumber()).thenReturn(5)
+//        MatcherAssert.assertThat(gameRepository.generateRandomNumber(), `is`(5))
 
         val singleViewModel = SingleViewModel(gameRepository)
         verify(gameRepository, times(1))
-//        MatcherAssert.assertThat(gameRepository.generateRandomNumber(), `is`(5))
 
         //when
         singleViewModel.gameResult.observeForever { }
         singleViewModel.gameEnd.observeForever {}
-        singleViewModel.tryingNumber.value = "1"
+        singleViewModel.tryingNumber.value = "2"
         singleViewModel.tryNumber()
 
         //then

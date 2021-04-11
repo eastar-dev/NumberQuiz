@@ -50,7 +50,6 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         val result = signumTest(tryingNumber)
         val lowHigh = GameResult.values()[result + 1]
         gameResult.value = lowHigh
-        tryCount++
         if (lowHigh == GameResult.correct) {
             members.value?.getOrNull(0) ?: return
             val members = members.value!!
@@ -58,6 +57,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
             gameEnd.value = "축하합니다.\n승자는 $winner 입니다."
         }
         Log.w(gameResult.value)
+        tryCount++
     }
 
     @VisibleForTesting

@@ -3,7 +3,7 @@ package dev.eastar.numberquiz.main
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import android.util.InstantExecutorExtension
-import org.hamcrest.MatcherAssert
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert
 import org.junit.jupiter.api.Test
@@ -20,7 +20,7 @@ class MainViewModelTest {
         val observer = Observer<Unit> {}
         try {
             val value = mainViewModel.exit.value
-            MatcherAssert.assertThat(value, `is`(Unit))
+            assertThat(value, `is`(Unit))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!

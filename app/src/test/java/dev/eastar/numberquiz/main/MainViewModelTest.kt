@@ -2,7 +2,7 @@ package dev.eastar.numberquiz.main
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import dev.eastar.numberquiz.InstantExecutorExtension
+import android.util.InstantExecutorExtension
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert

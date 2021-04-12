@@ -3,7 +3,7 @@ package dev.eastar.numberquiz.main
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
-import dev.eastar.numberquiz.InstantExecutorExtension
+import android.util.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
@@ -15,14 +15,15 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
 
-    private val gameRepository: GameRepository by lazy { mock() }
+    private val gameRepository: GameRepository by lazy { mock(GameRepository::class.java) }
+    private val gameRepositoryMock: GameRepository by lazy { mock(GameRepository::class.java) }
+    private val gameRepositorySpy: GameRepository by lazy { spy(GameRepository::class.java) }
 
     @BeforeEach
     fun init() {

@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz._demo
+package _demo
 
 import org.junit.jupiter.api.Tag
 

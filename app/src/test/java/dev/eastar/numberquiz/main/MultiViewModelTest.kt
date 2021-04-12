@@ -8,7 +8,7 @@ import android.util.getOrAwaitValue
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
-import dev.eastar.numberquiz.InstantExecutorExtension
+import android.util.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import kotlinx.coroutines.Dispatchers
@@ -19,17 +19,12 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsNull.nullValue
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.function.ThrowingConsumer
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EmptySource
 import org.junit.jupiter.params.provider.ValueSource
 import org.mockito.Mockito
-import java.util.*
-import java.util.stream.Stream
-import kotlin.Function as Function1001
 
 
 @ExperimentalCoroutinesApi

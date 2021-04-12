@@ -10,21 +10,18 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.eastar.numberquiz.Main
 import dev.eastar.numberquiz.R
 import org.junit.Rule
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 internal class MainFrTest {
-
     @get:Rule
     var activityScenarioRule = activityScenarioRule<Main>()
 
-
     @Test
     fun onCreateView() {
-        onView(withId(R.id.single))            // withId(R.id.my_view) is a ViewMatcher
+        onView(withId(R.id.single))         // withId(R.id.my_view) is a ViewMatcher
             .perform(click())               // click() is a ViewAction
             .check(matches(isDisplayed()))  // matches(isDisplayed()) is a ViewAssertion
-
     }
 }

@@ -15,7 +15,6 @@
  */
 package android.util
 
-import org.mockito.ArgumentCaptor
 import org.mockito.Mockito
 import org.mockito.stubbing.OngoingStubbing
 

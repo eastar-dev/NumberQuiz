@@ -1,34 +1,38 @@
 package dev.eastar.numberquiz.main
 
-//import android.util.mock
-//import com.nhaarman.mockitokotlin2.mock
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
-//import com.nhaarman.mockitokotlin2.whenever
 import dev.eastar.numberquiz.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
-import org.hamcrest.MatcherAssert
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.mockito.Mockito
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 
-//typealias wheneve = `when`
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
+
+    private val gameRepository: GameRepository by lazy { mock() }
+
     @BeforeEach
     fun init() {
         android.log.Log.outputSystem()
+
+        whenever(gameRepository.generateRandomNumber()).thenReturn(5)
+        assertThat(gameRepository.generateRandomNumber(), `is`(5))
+//        https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
+//        verify(gameRepository, times(1)) //error X
+        verify(gameRepository, times(1)).generateRandomNumber()
     }
 
 
@@ -36,26 +40,21 @@ class SingleViewModelTest {
     @Test
     fun tryNumber() {
         //given
-        val gameRepository: GameRepository = mock()
-        whenever(gameRepository.generateRandomNumber()).thenReturn(5)
-//        MatcherAssert.assertThat(gameRepository.generateRandomNumber(), `is`(5))
-
-        val singleViewModel = SingleViewModel(gameRepository)
-        verify(gameRepository, times(1))
+        val viewModel = SingleViewModel(gameRepository)
 
         //when
-        singleViewModel.gameResult.observeForever { }
-        singleViewModel.gameEnd.observeForever {}
-        singleViewModel.tryingNumber.value = "2"
-        singleViewModel.tryNumber()
+        viewModel.gameResult.observeForever { }
+        viewModel.gameEnd.observeForever {}
+        viewModel.tryingNumber.value = "2"
+        viewModel.tryNumber()
 
         //then
         assertAll({
-            val actual = singleViewModel.gameResult.value
-            MatcherAssert.assertThat(actual, `is`(GameResult.low))
+            val actual = viewModel.gameResult.value
+            assertThat(actual, `is`(GameResult.low))
         }, {
-            val actual = singleViewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, `is`(nullValue()))
+            val actual = viewModel.gameEnd.value
+            assertThat(actual, `is`(nullValue()))
         })
     }
 
@@ -63,22 +62,22 @@ class SingleViewModelTest {
     @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
     fun tryNumber(number: String, result: Int) {
         //given
-        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        val viewModel = SingleViewModel(gameRepository)
         //when
         val observer = Observer<GameResult> {}
-        singleViewModel.gameResult.observeForever(observer)
-        singleViewModel.tryingNumber.value = number
-        singleViewModel.tryNumber()
+        viewModel.gameResult.observeForever(observer)
+        viewModel.tryingNumber.value = number
+        viewModel.tryNumber()
 
         try {
             //then
             val gameResult = GameResult.values()[result]
-            val actual = singleViewModel.gameResult.value
-            MatcherAssert.assertThat(actual, `is`(gameResult))
+            val actual = viewModel.gameResult.value
+            assertThat(actual, `is`(gameResult))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            singleViewModel.gameResult.removeObserver(observer)
+            viewModel.gameResult.removeObserver(observer)
         }
     }
 
@@ -87,78 +86,78 @@ class SingleViewModelTest {
     @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
     fun signmunTest(number: Int, result: Int) {
         //given
-        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        val viewModel = SingleViewModel(gameRepository)
         //when
-        val actual = singleViewModel.signumTest(number)
+        val actual = viewModel.signumTest(number)
         //then
-        MatcherAssert.assertThat(actual, `is`(result))
+        assertThat(actual, `is`(result))
 
     }
 
     @Test
     fun tryNumber_correct() {
         //given
-        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        val viewModel = SingleViewModel(gameRepository)
         //when
         val observer = Observer<String> {}
-        singleViewModel.gameEnd.observeForever(observer)
-        singleViewModel.tryingNumber.value = "5"
-        singleViewModel.tryNumber()
+        viewModel.gameEnd.observeForever(observer)
+        viewModel.tryingNumber.value = "5"
+        viewModel.tryNumber()
 
         try {
             //then
-            val actual = singleViewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, `is`("축하합니다. 총시도 횟수는 1번 입니다."))
+            val actual = viewModel.gameEnd.value
+            assertThat(actual, `is`("축하합니다. 총시도 횟수는 1번 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            singleViewModel.gameEnd.removeObserver(observer)
+            viewModel.gameEnd.removeObserver(observer)
         }
     }
 
     @Test
     fun tryNumber_correct2() {
         //given
-        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        val viewModel = SingleViewModel(gameRepository)
         //when
         val observer = Observer<String> {}
-        singleViewModel.gameEnd.observeForever(observer)
+        viewModel.gameEnd.observeForever(observer)
         arrayOf("1", "5").forEach {
-            singleViewModel.tryingNumber.value = it
-            singleViewModel.tryNumber()
+            viewModel.tryingNumber.value = it
+            viewModel.tryNumber()
         }
 
         try {
             //then
-            val actual = singleViewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, `is`("축하합니다. 총시도 횟수는 2번 입니다."))
+            val actual = viewModel.gameEnd.value
+            assertThat(actual, `is`("축하합니다. 총시도 횟수는 2번 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            singleViewModel.gameEnd.removeObserver(observer)
+            viewModel.gameEnd.removeObserver(observer)
         }
     }
 
     @Test
     fun tryNumber_correct3() {
         //given
-        val singleViewModel = SingleViewModel(GameRepositoryFack())
+        val viewModel = SingleViewModel(gameRepository)
         //when
         val observer = Observer<String> {}
-        singleViewModel.gameEnd.observeForever(observer)
+        viewModel.gameEnd.observeForever(observer)
         arrayOf("1", "2", "5").forEach {
-            singleViewModel.tryingNumber.value = it
-            singleViewModel.tryNumber()
+            viewModel.tryingNumber.value = it
+            viewModel.tryNumber()
         }
 
         try {
             //then
-            val actual = singleViewModel.gameEnd.value
-            MatcherAssert.assertThat(actual, `is`("축하합니다. 총시도 횟수는 3번 입니다."))
+            val actual = viewModel.gameEnd.value
+            assertThat(actual, `is`("축하합니다. 총시도 횟수는 3번 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            singleViewModel.gameEnd.removeObserver(observer)
+            viewModel.gameEnd.removeObserver(observer)
         }
     }
 }

@@ -5,9 +5,12 @@ package dev.eastar.numberquiz.main
 
 import android.log.Log
 import android.util.getOrAwaitValue
+import android.util.mock
+import android.util.whenever
 import androidx.lifecycle.Observer
 import dev.eastar.numberquiz.InstantExecutorExtension
 import dev.eastar.numberquiz.data.GameResult
+import dev.eastar.numberquiz.data.repo.GameRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -23,6 +26,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EmptySource
 import org.junit.jupiter.params.provider.ValueSource
+import org.mockito.Mockito
 import java.util.*
 import java.util.stream.Stream
 import kotlin.Function as Function1001
@@ -34,12 +38,21 @@ class MultiViewModelTest {
     private val testDispatcher = TestCoroutineDispatcher()
     private val testScope = TestCoroutineScope(testDispatcher)
 
+    private val gameRepository: GameRepository by lazy { mock() }
+
     @BeforeEach
     fun init() {
         Log.outputSystem()
-        Dispatchers.setMain(testDispatcher)
-    }
 
+        Dispatchers.setMain(testDispatcher)
+
+        whenever(gameRepository.generateRandomNumber()).thenReturn(5)
+        assertThat(gameRepository.generateRandomNumber(), CoreMatchers.`is`(5))
+//        https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
+//        verify(gameRepository, times(1)) //error X
+        Mockito.verify(gameRepository, Mockito.times(1)).generateRandomNumber()
+    }
+    
     @AfterEach
     fun exit() {
         Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
@@ -50,7 +63,7 @@ class MultiViewModelTest {
     @Test
     fun tryNumber() {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
         //when
         val observer = Observer<GameResult> {}
         viewModel.gameResult.observeForever(observer)
@@ -75,7 +88,7 @@ class MultiViewModelTest {
     @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
     fun tryNumber(number: String, result: Int) {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
         //when
         val observer = Observer<GameResult> {}
         viewModel.gameResult.observeForever(observer)
@@ -100,7 +113,7 @@ class MultiViewModelTest {
     @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
     fun signmunTest(number: Int, result: Int) {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
         //when
         val actual = viewModel.signumTest(number)
         //then
@@ -111,7 +124,7 @@ class MultiViewModelTest {
     @Test
     fun tryNumber_correct() {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -136,7 +149,7 @@ class MultiViewModelTest {
     @Test
     fun tryNumber_correct2() {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -162,9 +175,9 @@ class MultiViewModelTest {
     @EmptySource //"" test를 자동으로 해준다.
     @ValueSource(strings = arrayOf(" ", ",", "  , , , ,", "\t   , , , ,"))
     @DisplayName("""Multi에서 입력받은유저가""면 요청한다""")
-    fun setMembers_empty(input: String?) {
+    fun setMembers_empty(input: String) {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
 
         //when
         viewModel.setMembers(input)
@@ -186,7 +199,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 시작시emptyplayer 요청")
     fun setMembers_empty() {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
         //when
         val observer = Observer<Unit> { actual ->
             Assertions.assertEquals(Unit, actual)
@@ -203,7 +216,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 입력받은유저가>2면 입력요청안한다")
     fun setMembers_over2_member() {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
         //when
         viewModel.setMembers("성춘향,변사또")
         val observer = Observer<Unit> { Assertions.fail() }
@@ -219,7 +232,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
     fun setMembers_1player() {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
 
         //when
         viewModel.setMembers("성춘향")
@@ -244,7 +257,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
     fun setMembers_1player_case2() = testDispatcher.runBlockingTest {
         //given
-        val viewModel = MultiViewModel(GameRepositoryFack())
+        val viewModel = MultiViewModel(gameRepository)
 
         //when
         viewModel.setMembers("성춘향")

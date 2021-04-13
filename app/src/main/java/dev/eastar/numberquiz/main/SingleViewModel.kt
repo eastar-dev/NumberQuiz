@@ -5,7 +5,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import javax.inject.Inject
 
@@ -18,7 +17,7 @@ class SingleViewModel @Inject constructor(gameRepository: GameRepository) : View
         Log.e("generateRandomNumber", number)
     }
 
-    val gameResult = MutableLiveData<GameResult>()
+    val gameResult = MutableLiveData<dev.eastar.domain.GameResult>()
     val gameEnd = MutableLiveData<String>()
     val tryingNumber = MutableLiveData<String>()
 
@@ -30,10 +29,10 @@ class SingleViewModel @Inject constructor(gameRepository: GameRepository) : View
         tryingNumber ?: return
 
         val result = signumTest(tryingNumber)
-        val lowHigh = GameResult.values()[result + 1]
+        val lowHigh = dev.eastar.domain.GameResult.values()[result + 1]
         gameResult.value = lowHigh
         tryCount++
-        if(lowHigh == GameResult.correct)
+        if(lowHigh == dev.eastar.domain.GameResult.correct)
             gameEnd.value = "축하합니다. 총시도 횟수는 ${tryCount}번 입니다."
         Log.w(gameResult.value)
     }

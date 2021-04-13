@@ -9,7 +9,6 @@ import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
 import android.util.InstantExecutorExtension
-import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -60,14 +59,14 @@ class MultiViewModelTest {
         //given
         val viewModel = MultiViewModel(gameRepository)
         //when
-        val observer = Observer<GameResult> {}
+        val observer = Observer<dev.eastar.domain.GameResult> {}
         viewModel.gameResult.observeForever(observer)
         viewModel.tryingNumber.value = "1"
         viewModel.tryNumber()
 
         try {
             //then
-            val gameResult = GameResult.low
+            val gameResult = dev.eastar.domain.GameResult.low
             val actual = viewModel.gameResult.value
             val actual2 = viewModel.gameEnd.value
             assertThat(actual, CoreMatchers.`is`(gameResult))
@@ -85,7 +84,7 @@ class MultiViewModelTest {
         //given
         val viewModel = MultiViewModel(gameRepository)
         //when
-        val observer = Observer<GameResult> {}
+        val observer = Observer<dev.eastar.domain.GameResult> {}
         viewModel.gameResult.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.setMembers("성춘향,변사또")
@@ -93,7 +92,7 @@ class MultiViewModelTest {
 
         try {
             //then
-            val gameResult = GameResult.values()[result]
+            val gameResult = dev.eastar.domain.GameResult.values()[result]
             val actual = viewModel.gameResult.value
             assertThat(actual, CoreMatchers.`is`(gameResult))
 

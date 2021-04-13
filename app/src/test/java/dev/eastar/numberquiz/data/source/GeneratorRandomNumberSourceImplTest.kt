@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class GeneratorRandomNumberSourceImplTest {
 
-    @RepeatedTest(10000)
+    @RepeatedTest(100)
     fun getRandomNumber1between100() {
         //given
         val generatorRandomNumberSource = GeneratorRandomNumberSourceImpl()

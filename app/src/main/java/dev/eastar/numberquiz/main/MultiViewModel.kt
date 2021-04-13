@@ -4,10 +4,7 @@ import android.log.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.eastar.numberquiz.data.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
-import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,7 +13,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
     private val number = gameRepository.generateRandomNumber()
 
 
-    val gameResult = MutableLiveData<GameResult>()
+    val gameResult = MutableLiveData<dev.eastar.domain.GameResult>()
     val gameEnd = MutableLiveData<String>()
     val tryingNumber = MutableLiveData<String>()
 
@@ -48,9 +45,9 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         tryingNumber ?: return
 
         val result = signumTest(tryingNumber)
-        val lowHigh = GameResult.values()[result + 1]
+        val lowHigh = dev.eastar.domain.GameResult.values()[result + 1]
         gameResult.value = lowHigh
-        if (lowHigh == GameResult.correct) {
+        if (lowHigh == dev.eastar.domain.GameResult.correct) {
             members.value?.getOrNull(0) ?: return
             val members = members.value!!
             val winner = members[tryCount % members.size]

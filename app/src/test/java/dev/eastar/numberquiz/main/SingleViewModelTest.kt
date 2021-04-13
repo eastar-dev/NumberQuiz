@@ -3,6 +3,7 @@ package dev.eastar.numberquiz.main
 import android.util.whenever
 import androidx.lifecycle.Observer
 import android.util.InstantExecutorExtension
+import dev.eastar.enty.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
@@ -50,7 +51,7 @@ class SingleViewModelTest {
         //then
         assertAll({
             val actual = viewModel.gameResult.value
-            assertThat(actual, `is`(dev.eastar.domain.GameResult.low))
+            assertThat(actual, `is`(GameResult.low))
         }, {
             val actual = viewModel.gameEnd.value
             assertThat(actual, `is`(nullValue()))
@@ -63,14 +64,14 @@ class SingleViewModelTest {
         //given
         val viewModel = SingleViewModel(gameRepository)
         //when
-        val observer = Observer<dev.eastar.domain.GameResult> {}
+        val observer = Observer<GameResult> {}
         viewModel.gameResult.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.tryNumber()
 
         try {
             //then
-            val gameResult = dev.eastar.domain.GameResult.values()[result]
+            val gameResult = GameResult.values()[result]
             val actual = viewModel.gameResult.value
             assertThat(actual, `is`(gameResult))
 

@@ -1,4 +1,4 @@
-package dev.eastar.domain
+package dev.eastar.enty
 
 enum class GameResult {
     low, correct, high,

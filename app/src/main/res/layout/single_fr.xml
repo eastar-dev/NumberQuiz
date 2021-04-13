@@ -9,7 +9,7 @@
             name="viewmodel"
             type="dev.eastar.numberquiz.main.SingleViewModel" />
 
-        <import type="dev.eastar.domain.GameResult" />
+        <import type="dev.eastar.enty.GameResult" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

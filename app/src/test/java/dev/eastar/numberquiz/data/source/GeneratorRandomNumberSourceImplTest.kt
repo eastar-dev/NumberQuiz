@@ -3,20 +3,19 @@ package dev.eastar.numberquiz.data.source
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 
 class GeneratorRandomNumberSourceImplTest {
 
-    @Test
+    @RepeatedTest(10000)
     fun getRandomNumber1between100() {
         //given
         val generatorRandomNumberSource = GeneratorRandomNumberSourceImpl()
-        repeat(10000) {
-            //when
-            val actual: Int = generatorRandomNumberSource.getRandomNumber1between100()
-            //then
-            assertTrue(actual in 1..100)
-        }
+        //when
+        val actual: Int = generatorRandomNumberSource.getRandomNumber1between100()
+        //then
+        assertTrue(actual in 1..100)
     }
 
     @Test

@@ -5,4 +5,5 @@ apply from: '../base.gradle'
 
 dependencies {
     implementation project(':repository')
+    implementation project(':entity')
 }

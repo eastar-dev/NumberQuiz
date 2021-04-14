@@ -6,7 +6,7 @@ import android.util.whenever
 import androidx.lifecycle.Observer
 import dev.eastar.domain.TryNumberUseCase
 import dev.eastar.domain.TryNumberUseCaseImpl
-import dev.eastar.enty.GameResult
+import dev.eastar.entity.GameResult
 import dev.eastar.repository.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
@@ -55,7 +55,7 @@ class SingleViewModelTest {
         //then
         assertAll({
             val actual = viewModel.gameResult.value
-            assertThat(actual, `is`(GameResult.low))
+            assertThat(actual, `is`(dev.eastar.entity.GameResult.low))
         }, {
             val actual = viewModel.gameEnd.value
             assertThat(actual, `is`(nullValue()))
@@ -68,14 +68,14 @@ class SingleViewModelTest {
         //given
         val viewModel = SingleViewModel(tryNumberUseCase)
         //when
-        val observer = Observer<GameResult> {}
+        val observer = Observer<dev.eastar.entity.GameResult> {}
         viewModel.gameResult.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.tryNumber()
 
         try {
             //then
-            val gameResult = GameResult.values()[result]
+            val gameResult = dev.eastar.entity.GameResult.values()[result]
             val actual = viewModel.gameResult.value
             assertThat(actual, `is`(gameResult))
 

@@ -7,7 +7,7 @@ import android.util.whenever
 import androidx.lifecycle.Observer
 import dev.eastar.domain.TryNumberUseCase
 import dev.eastar.domain.TryNumberUseCaseImpl
-import dev.eastar.enty.GameResult
+import dev.eastar.entity.GameResult
 import dev.eastar.repository.GameRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -59,14 +59,14 @@ class MultiViewModelTest {
         //given
         val viewModel = MultiViewModel(tryNumberUseCase)
         //when
-        val observer = Observer<GameResult> {}
+        val observer = Observer<dev.eastar.entity.GameResult> {}
         viewModel.gameResult.observeForever(observer)
         viewModel.tryingNumber.value = "1"
         viewModel.tryNumber()
 
         try {
             //then
-            val gameResult = GameResult.low
+            val gameResult = dev.eastar.entity.GameResult.low
             val actual = viewModel.gameResult.value
             val actual2 = viewModel.gameEnd.value
             assertThat(actual, CoreMatchers.`is`(gameResult))
@@ -84,7 +84,7 @@ class MultiViewModelTest {
         //given
         val viewModel = MultiViewModel(tryNumberUseCase)
         //when
-        val observer = Observer<GameResult> {}
+        val observer = Observer<dev.eastar.entity.GameResult> {}
         viewModel.gameResult.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.setMembers("성춘향,변사또")
@@ -92,7 +92,7 @@ class MultiViewModelTest {
 
         try {
             //then
-            val gameResult = GameResult.values()[result]
+            val gameResult = dev.eastar.entity.GameResult.values()[result]
             val actual = viewModel.gameResult.value
             assertThat(actual, CoreMatchers.`is`(gameResult))
 

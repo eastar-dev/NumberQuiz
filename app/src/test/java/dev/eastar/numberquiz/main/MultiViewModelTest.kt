@@ -104,17 +104,17 @@ class MultiViewModelTest {
     }
 
     //    @ValueSource(ints = [1,3,5,7,9])
-    @ParameterizedTest
-    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
-    fun signmunTest(number: Int, result: Int) {
-        //given
-        val viewModel = MultiViewModel(gameRepository)
-        //when
-        val actual = viewModel.signumTest(number)
-        //then
-        assertThat(actual, CoreMatchers.`is`(result))
-
-    }
+//    @ParameterizedTest
+//    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
+//    fun signmunTest(number: Int, result: Int) {
+//        //given
+//        val viewModel = MultiViewModel(gameRepository)
+//        //when
+//        val actual = viewModel.signumTest(number)
+//        //then
+//        assertThat(actual, CoreMatchers.`is`(result))
+//
+//    }
 
     @Test
     fun tryNumber_correct() {
@@ -123,7 +123,7 @@ class MultiViewModelTest {
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
-        viewModel.members.value = arrayOf("성춘향", "변사또")
+        viewModel.setMembers("성춘향,변사또")
 
         arrayOf("5").forEach {
             viewModel.tryingNumber.value = it
@@ -148,7 +148,7 @@ class MultiViewModelTest {
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
-        viewModel.members.value = arrayOf("성춘향", "변사또")
+        viewModel.setMembers("성춘향,변사또")
 
         arrayOf("1", "5").forEach {
             viewModel.tryingNumber.value = it

@@ -82,17 +82,17 @@ class SingleViewModelTest {
     }
 
     //    @ValueSource(ints = [1,3,5,7,9])
-    @ParameterizedTest
-    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
-    fun signmunTest(number: Int, result: Int) {
-        //given
-        val viewModel = SingleViewModel(gameRepository)
-        //when
-        val actual = viewModel.signumTest(number)
-        //then
-        assertThat(actual, `is`(result))
-
-    }
+//    @ParameterizedTest
+//    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
+//    fun signmunTest(number: Int, result: Int) {
+//        //given
+//        val viewModel = SingleViewModel(gameRepository)
+//        //when
+//        val actual = signumTest(number)
+//        //then
+//        assertThat(actual, `is`(result))
+//
+//    }
 
     @Test
     fun tryNumber_correct() {

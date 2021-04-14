@@ -1,18 +1,25 @@
 package dev.eastar.numberquiz.main
 
 import android.log.Log
-import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.eastar.domain.GameDomain
 import dev.eastar.enty.GameResult
 import dev.eastar.numberquiz.data.repo.GameRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewModel() {
-    private var tryCount: Int = 0
-    private val number = gameRepository.generateRandomNumber()
+    private var gameDomain: GameDomain
 
+    init {
+        val number = gameRepository.generateRandomNumber()
+        gameDomain = GameDomain(number)
+        Log.e("generateRandomNumber", number)
+    }
 
     val gameResult = MutableLiveData<GameResult>()
     val gameEnd = MutableLiveData<String>()
@@ -34,48 +41,37 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
 
 
     init {
-        Log.e("generateRandomNumber", number)
         setMembers("")
     }
 
     fun tryNumber() {
-        Log.e(tryingNumber.value, number)
         val tryingNumber = tryingNumber.runCatching {
             value?.toInt()
         }.getOrNull()
         tryingNumber ?: return
 
-        val result = signumTest(tryingNumber)
-        val lowHigh = GameResult.values()[result + 1]
-        gameResult.value = lowHigh
-        if (lowHigh == GameResult.correct) {
-            members.value?.getOrNull(0) ?: return
-            val members = members.value!!
-            val winner = members[tryCount % members.size]
-            gameEnd.value = "축하합니다.\n승자는 $winner 입니다."
-        }
+        val result = gameDomain.tryNumber(tryingNumber)
+        gameResult.value = result
+        if (result == GameResult.correct)
+            gameEnd.value = "축하합니다.\n승자는 ${gameDomain.winner} 입니다."
         Log.w(gameResult.value)
-        tryCount++
-    }
-
-    @VisibleForTesting
-    fun signumTest(number: Int): Int {
-        return Integer.signum(number - this.number)
     }
 
     fun setMembers(membersText: String) {
+        val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
         //case1
-        members.value = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
-        //case2
-//        members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
-        //case3
+        members.value = playerArray
+//        //case2
+//        members.postValue(playerArray)
+//        //case3
 //        Executors.newSingleThreadExecutor().execute {
-//            members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
+//            members.postValue(playerArray)
 //        }
-        //case4
+//        //case4
 //        viewModelScope.launch {
-//            members.postValue(membersText.split(",").filter { it.isNotBlank() }.toTypedArray())
+//            members.postValue(playerArray)
 //        }
+        gameDomain.player = playerArray
     }
 }
 

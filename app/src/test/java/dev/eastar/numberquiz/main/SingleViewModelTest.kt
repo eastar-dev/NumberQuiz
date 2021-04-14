@@ -1,10 +1,12 @@
 package dev.eastar.numberquiz.main
 
+import android.util.InstantExecutorExtension
 import android.util.whenever
 import androidx.lifecycle.Observer
-import android.util.InstantExecutorExtension
+import dev.eastar.domain.TryNumberUseCase
+import dev.eastar.domain.TryNumberUseCaseImpl
 import dev.eastar.enty.GameResult
-import dev.eastar.numberquiz.data.repo.GameRepository
+import dev.eastar.repository.GameRepository
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -14,25 +16,26 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.mockito.Mockito.*
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
+//    private val gameRepositoryMock: GameRepository by lazy { mock(GameRepository::class.java) }
+//    private val gameRepositorySpy: GameRepository by lazy { spy(GameRepository::class.java) }
 
-    private val gameRepository: GameRepository by lazy { mock(GameRepository::class.java) }
-    private val gameRepositoryMock: GameRepository by lazy { mock(GameRepository::class.java) }
-    private val gameRepositorySpy: GameRepository by lazy { spy(GameRepository::class.java) }
+    private lateinit var tryNumberUseCase: TryNumberUseCase
 
     @BeforeEach
     fun init() {
-        android.log.Log.outputSystem()
-
+        val gameRepository: GameRepository by lazy { android.util.mock() }
         whenever(gameRepository.generateRandomNumber()).thenReturn(5)
         assertThat(gameRepository.generateRandomNumber(), `is`(5))
-//        https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
-//        verify(gameRepository, times(1)) //error X
+        //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         verify(gameRepository, times(1)).generateRandomNumber()
+
+        tryNumberUseCase = TryNumberUseCaseImpl(gameRepository)
     }
 
 
@@ -40,7 +43,7 @@ class SingleViewModelTest {
     @Test
     fun tryNumber() {
         //given
-        val viewModel = SingleViewModel(gameRepository)
+        val viewModel = SingleViewModel(tryNumberUseCase)
 
         //when
         viewModel.gameResult.observeForever { }
@@ -62,7 +65,7 @@ class SingleViewModelTest {
     @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
     fun tryNumber(number: String, result: Int) {
         //given
-        val viewModel = SingleViewModel(gameRepository)
+        val viewModel = SingleViewModel(tryNumberUseCase)
         //when
         val observer = Observer<GameResult> {}
         viewModel.gameResult.observeForever(observer)
@@ -86,7 +89,7 @@ class SingleViewModelTest {
 //    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
 //    fun signmunTest(number: Int, result: Int) {
 //        //given
-//        val viewModel = SingleViewModel(gameRepository)
+//        val viewModel = SingleViewModel(tryNumberUseCase)
 //        //when
 //        val actual = signumTest(number)
 //        //then
@@ -97,7 +100,7 @@ class SingleViewModelTest {
     @Test
     fun tryNumber_correct() {
         //given
-        val viewModel = SingleViewModel(gameRepository)
+        val viewModel = SingleViewModel(tryNumberUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -118,7 +121,7 @@ class SingleViewModelTest {
     @Test
     fun tryNumber_correct2() {
         //given
-        val viewModel = SingleViewModel(gameRepository)
+        val viewModel = SingleViewModel(tryNumberUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -141,7 +144,7 @@ class SingleViewModelTest {
     @Test
     fun tryNumber_correct3() {
         //given
-        val viewModel = SingleViewModel(gameRepository)
+        val viewModel = SingleViewModel(tryNumberUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)

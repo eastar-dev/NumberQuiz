@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.data.source
+package dev.eastar.source
 
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is

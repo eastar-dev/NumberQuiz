@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.data.source
+package dev.eastar.source
 
 interface GeneratorRandomNumberSource {
     fun getRandomNumber1between100(): Int

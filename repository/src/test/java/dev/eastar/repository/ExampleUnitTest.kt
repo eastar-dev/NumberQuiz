@@ -1,4 +1,4 @@
-package dev.eastar.domain
+package dev.eastar.repository
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

@@ -4,21 +4,12 @@ import android.log.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.eastar.domain.GameDomain
+import dev.eastar.domain.TryNumberUseCase
 import dev.eastar.enty.GameResult
-import dev.eastar.numberquiz.data.repo.GameRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class SingleViewModel @Inject constructor(gameRepository: GameRepository) : ViewModel() {
-    private var gameDomain: GameDomain
-
-    init {
-        val number = gameRepository.generateRandomNumber()
-        gameDomain = GameDomain(number)
-        Log.e("generateRandomNumber", number)
-    }
-
+class SingleViewModel @Inject constructor(private var tryNumberUseCase: TryNumberUseCase) : ViewModel() {
     val gameResult = MutableLiveData<GameResult>()
     val gameEnd = MutableLiveData<String>()
     val tryingNumber = MutableLiveData<String>()
@@ -29,7 +20,7 @@ class SingleViewModel @Inject constructor(gameRepository: GameRepository) : View
         }.getOrNull()
         tryingNumber ?: return
 
-        val gd = gameDomain
+        val gd = tryNumberUseCase
         val lowHigh = gd.tryNumber(tryingNumber)
 
         gameResult.value = lowHigh

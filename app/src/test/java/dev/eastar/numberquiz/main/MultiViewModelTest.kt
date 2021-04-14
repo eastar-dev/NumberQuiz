@@ -1,19 +1,20 @@
 package dev.eastar.numberquiz.main
 
-//import org.hamcrest.Matchers
-//import org.hamcrest.Matchers.`is`
-
-import android.log.Log
+import android.util.InstantExecutorExtension
 import android.util.getOrAwaitValue
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
-import android.util.InstantExecutorExtension
+import dev.eastar.domain.TryNumberUseCase
+import dev.eastar.domain.TryNumberUseCaseImpl
 import dev.eastar.enty.GameResult
-import dev.eastar.numberquiz.data.repo.GameRepository
+import dev.eastar.repository.GameRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
@@ -33,21 +34,19 @@ class MultiViewModelTest {
     private val testDispatcher = TestCoroutineDispatcher()
     private val testScope = TestCoroutineScope(testDispatcher)
 
-    private val gameRepository: GameRepository by lazy { mock() }
+    private lateinit var tryNumberUseCase: TryNumberUseCase
 
     @BeforeEach
     fun init() {
-        Log.outputSystem()
-
-        Dispatchers.setMain(testDispatcher)
-
+        val gameRepository: GameRepository by lazy { mock() }
         whenever(gameRepository.generateRandomNumber()).thenReturn(5)
         assertThat(gameRepository.generateRandomNumber(), CoreMatchers.`is`(5))
-//        https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
-//        verify(gameRepository, times(1)) //error X
+        //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         Mockito.verify(gameRepository, Mockito.times(1)).generateRandomNumber()
+
+        tryNumberUseCase = TryNumberUseCaseImpl(gameRepository)
     }
-    
+
     @AfterEach
     fun exit() {
         Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
@@ -58,7 +57,7 @@ class MultiViewModelTest {
     @Test
     fun tryNumber() {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
         //when
         val observer = Observer<GameResult> {}
         viewModel.gameResult.observeForever(observer)
@@ -83,7 +82,7 @@ class MultiViewModelTest {
     @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
     fun tryNumber(number: String, result: Int) {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
         //when
         val observer = Observer<GameResult> {}
         viewModel.gameResult.observeForever(observer)
@@ -108,7 +107,7 @@ class MultiViewModelTest {
 //    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
 //    fun signmunTest(number: Int, result: Int) {
 //        //given
-//        val viewModel = MultiViewModel(gameRepository)
+//        val viewModel = MultiViewModel(tryNumberUseCase)
 //        //when
 //        val actual = viewModel.signumTest(number)
 //        //then
@@ -119,7 +118,7 @@ class MultiViewModelTest {
     @Test
     fun tryNumber_correct() {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -144,7 +143,7 @@ class MultiViewModelTest {
     @Test
     fun tryNumber_correct2() {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -172,7 +171,7 @@ class MultiViewModelTest {
     @DisplayName("""Multi에서 입력받은유저가""면 요청한다""")
     fun setMembers_empty(input: String) {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
 
         //when
         viewModel.setMembers(input)
@@ -194,7 +193,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 시작시emptyplayer 요청")
     fun setMembers_empty() {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
         //when
         val observer = Observer<Unit> { actual ->
             Assertions.assertEquals(Unit, actual)
@@ -211,7 +210,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 입력받은유저가>2면 입력요청안한다")
     fun setMembers_over2_member() {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
         //when
         viewModel.setMembers("성춘향,변사또")
         val observer = Observer<Unit> { Assertions.fail() }
@@ -227,7 +226,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
     fun setMembers_1player() {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
 
         //when
         viewModel.setMembers("성춘향")
@@ -252,7 +251,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
     fun setMembers_1player_case2() = testDispatcher.runBlockingTest {
         //given
-        val viewModel = MultiViewModel(gameRepository)
+        val viewModel = MultiViewModel(tryNumberUseCase)
 
         //when
         viewModel.setMembers("성춘향")

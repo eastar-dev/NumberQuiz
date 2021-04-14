@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.data.repo
+package dev.eastar.repository
 
 interface GameRepository {
     fun generateRandomNumber(): Int

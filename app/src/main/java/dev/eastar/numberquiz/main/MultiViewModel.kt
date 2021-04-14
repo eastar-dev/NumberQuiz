@@ -6,20 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.eastar.domain.GameDomain
+import dev.eastar.domain.TryNumberUseCase
 import dev.eastar.enty.GameResult
-import dev.eastar.numberquiz.data.repo.GameRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewModel() {
-    private var gameDomain: GameDomain
-
-    init {
-        val number = gameRepository.generateRandomNumber()
-        gameDomain = GameDomain(number)
-        Log.e("generateRandomNumber", number)
-    }
+class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumberUseCase) : ViewModel() {
 
     val gameResult = MutableLiveData<GameResult>()
     val gameEnd = MutableLiveData<String>()
@@ -50,10 +42,10 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
         }.getOrNull()
         tryingNumber ?: return
 
-        val result = gameDomain.tryNumber(tryingNumber)
+        val result = tryNumberUseCase.tryNumber(tryingNumber)
         gameResult.value = result
         if (result == GameResult.correct)
-            gameEnd.value = "축하합니다.\n승자는 ${gameDomain.winner} 입니다."
+            gameEnd.value = "축하합니다.\n승자는 ${tryNumberUseCase.winner} 입니다."
         Log.w(gameResult.value)
     }
 
@@ -71,7 +63,7 @@ class MultiViewModel @Inject constructor(gameRepository: GameRepository) : ViewM
 //        viewModelScope.launch {
 //            members.postValue(playerArray)
 //        }
-        gameDomain.player = playerArray
+        tryNumberUseCase.player = playerArray
     }
 }
 

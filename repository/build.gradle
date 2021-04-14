@@ -3,6 +3,3 @@ plugins {
 }
 apply from: '../base.gradle'
 
-dependencies {
-    implementation project(':repository')
-}

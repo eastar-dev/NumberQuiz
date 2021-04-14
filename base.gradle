@@ -49,9 +49,9 @@ dependencies {
 
 
     //log
-    debugImplementation 'com.github.eastar-dev.EastarLog2:log:2.1.0'
-    releaseImplementation 'com.github.eastar-dev.EastarLog2:logNoOp:2.1.0'
-    testImplementation 'com.github.eastar-dev.EastarLog2:logTest:2.1.0'
+    debugImplementation 'com.github.eastar-dev.EastarLog2:log:2.1.1'
+    releaseImplementation 'com.github.eastar-dev.EastarLog2:logNoOp:2.1.1'
+    testImplementation 'com.github.eastar-dev.EastarLog2:logTest:2.1.1'
     //ktx
     implementation 'com.github.eastar-dev:EastarKtx:1.2.0'
 
@@ -84,7 +84,7 @@ dependencies {
     //Kotlin의 클래스는 기본이 final입니다. mocktio-inline을 추가해주거나 클래스를 open으로 선언해야 합니다.
 
 //    https://beomseok95.tistory.com/296
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0" //Mockito-Kotlin
+//    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0" //Mockito-Kotlin
 //    testImplementation 'org.hamcrest:hamcrest-all:1.3'
 
     ////////////////////////////////////////////////////////////////////////////////////

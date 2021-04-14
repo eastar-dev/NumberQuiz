@@ -11,10 +11,7 @@ import dev.eastar.enty.GameResult
 import dev.eastar.repository.GameRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
@@ -31,27 +28,17 @@ import org.mockito.Mockito
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantExecutorExtension::class)
 class MultiViewModelTest {
-    private val testDispatcher = TestCoroutineDispatcher()
-    private val testScope = TestCoroutineScope(testDispatcher)
-
     private lateinit var tryNumberUseCase: TryNumberUseCase
 
     @BeforeEach
     fun setUp() {
+
         val gameRepository: GameRepository by lazy { mock() }
         whenever(gameRepository.generateRandomNumber()).thenReturn(5)
         assertThat(gameRepository.generateRandomNumber(), CoreMatchers.`is`(5))
         //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         Mockito.verify(gameRepository, Mockito.times(1)).generateRandomNumber()
-
         tryNumberUseCase = TryNumberUseCaseImpl(gameRepository)
-    }
-
-    @AfterEach
-    fun exit() {
-        Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
-        testDispatcher.cleanupTestCoroutines()
-        testScope.cleanupTestCoroutines()
     }
 
     @Test
@@ -101,19 +88,6 @@ class MultiViewModelTest {
             viewModel.gameResult.removeObserver(observer)
         }
     }
-
-    //    @ValueSource(ints = [1,3,5,7,9])
-//    @ParameterizedTest
-//    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
-//    fun signmunTest(number: Int, result: Int) {
-//        //given
-//        val viewModel = MultiViewModel(tryNumberUseCase)
-//        //when
-//        val actual = viewModel.signumTest(number)
-//        //then
-//        assertThat(actual, CoreMatchers.`is`(result))
-//
-//    }
 
     @Test
     fun tryNumber_correct() {
@@ -249,7 +223,7 @@ class MultiViewModelTest {
 
     @Test
     @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
-    fun setMembers_1player_case2() = testDispatcher.runBlockingTest {
+    fun setMembers_1player_case2() {
         //given
         val viewModel = MultiViewModel(tryNumberUseCase)
 

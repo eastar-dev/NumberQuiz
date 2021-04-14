@@ -15,7 +15,7 @@ class TryNumberUseCaseImpl(gameRepository: GameRepository) : TryNumberUseCase {
     override var player: Array<String> = emptyArray()
     override var tryCount: Int = 0
     override val winner: String
-        get() = player[tryCount / player.size]
+        get() = player[(tryCount - 1) % player.size]
 
     override fun tryNumber(guess: Int): GameResult {
         Log.e(guess, answer)

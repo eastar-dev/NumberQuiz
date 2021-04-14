@@ -59,7 +59,7 @@ internal class TryNumberUseCaseImplTest {
             { MatcherAssert.assertThat(case.tryNumber(6), CoreMatchers.`is`(GameResult.high)) },
             { MatcherAssert.assertThat(case.tryNumber(4), CoreMatchers.`is`(GameResult.low)) },
             { MatcherAssert.assertThat(case.tryNumber(5), CoreMatchers.`is`(GameResult.correct)) },
-            { MatcherAssert.assertThat(case.winner, CoreMatchers.`is`("성춘향")) },
+            { MatcherAssert.assertThat(case.winner, CoreMatchers.`is`("변사또")) },
         )
     }
 }

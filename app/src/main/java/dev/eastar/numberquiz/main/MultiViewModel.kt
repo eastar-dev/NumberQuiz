@@ -41,11 +41,11 @@ class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumber
             value?.toInt()
         }.getOrNull()
         tryingNumber ?: return
-
-        val result = tryNumberUseCase.tryNumber(tryingNumber)
-        gameResult.value = result
-        if (result == GameResult.correct)
-            gameEnd.value = "축하합니다.\n승자는 ${tryNumberUseCase.winner} 입니다."
+        val case = tryNumberUseCase
+        val lowHigh = case.tryNumber(tryingNumber)
+        gameResult.value = lowHigh
+        if (lowHigh == GameResult.correct)
+            gameEnd.value = "축하합니다.\n승자는 ${case.winner} 입니다."
         Log.w(gameResult.value)
     }
 

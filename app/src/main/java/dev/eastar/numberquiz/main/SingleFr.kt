@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.eastar.ktx.alert
+import dev.eastar.ktx.hideKeyboard
 import dev.eastar.ktx.positiveButton
 import dev.eastar.numberquiz.databinding.SingleFrBinding
 
@@ -30,12 +31,12 @@ class SingleFr : LogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel.signumTest(1)
         onLoadOnce()
     }
 
     private fun onLoadOnce() {
         viewModel.gameEnd.observe(viewLifecycleOwner) {
+            hideKeyboard()
             alert(it) {
                 positiveButton("OK")
                 setOnDismissListener { parentFragmentManager.popBackStack() }

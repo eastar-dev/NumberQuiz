@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.eastar.ktx.alert
+import dev.eastar.ktx.hideKeyboard
 import dev.eastar.ktx.negativeButton
 import dev.eastar.ktx.positiveButton
 import dev.eastar.numberquiz.databinding.MultiFrBinding
@@ -55,6 +56,7 @@ class MultiFr : LogFragment() {
             }
         }
         viewModel.gameEnd.observe(viewLifecycleOwner) {
+            hideKeyboard()
             alert(it) {
                 positiveButton("OK")
                 setOnDismissListener { parentFragmentManager.popBackStack() }

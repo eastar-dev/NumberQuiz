@@ -20,12 +20,12 @@ class SingleViewModel @Inject constructor(private var tryNumberUseCase: TryNumbe
         }.getOrNull()
         tryingNumber ?: return
 
-        val gd = tryNumberUseCase
-        val lowHigh = gd.tryNumber(tryingNumber)
+        val case = tryNumberUseCase
+        val lowHigh = case.tryNumber(tryingNumber)
 
         gameResult.value = lowHigh
         if (lowHigh == GameResult.correct)
-            gameEnd.value = "축하합니다. 총시도 횟수는 ${gd.tryCount}번 입니다."
+            gameEnd.value = "축하합니다. 총시도 횟수는 ${case.tryCount}번 입니다."
         Log.w(gameResult.value)
     }
 }

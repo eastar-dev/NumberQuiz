@@ -16,7 +16,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object GameDomainModule {
+object TryNumberUseCaseModule {
     @Provides
     fun provideGameDomains(
         gameRepository: GameRepository

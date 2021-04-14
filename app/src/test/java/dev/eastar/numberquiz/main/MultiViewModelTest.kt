@@ -37,7 +37,7 @@ class MultiViewModelTest {
     private lateinit var tryNumberUseCase: TryNumberUseCase
 
     @BeforeEach
-    fun init() {
+    fun setUp() {
         val gameRepository: GameRepository by lazy { mock() }
         whenever(gameRepository.generateRandomNumber()).thenReturn(5)
         assertThat(gameRepository.generateRandomNumber(), CoreMatchers.`is`(5))

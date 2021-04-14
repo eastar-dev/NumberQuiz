@@ -1,6 +1,7 @@
 package dev.eastar.numberquiz.main
 
 import android.util.InstantExecutorExtension
+import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
 import dev.eastar.domain.TryNumberUseCase
@@ -28,8 +29,8 @@ class SingleViewModelTest {
     private lateinit var tryNumberUseCase: TryNumberUseCase
 
     @BeforeEach
-    fun init() {
-        val gameRepository: GameRepository by lazy { android.util.mock() }
+    fun setUp() {
+        val gameRepository: GameRepository by lazy { mock() }
         whenever(gameRepository.generateRandomNumber()).thenReturn(5)
         assertThat(gameRepository.generateRandomNumber(), `is`(5))
         //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls

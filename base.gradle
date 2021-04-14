@@ -49,11 +49,11 @@ dependencies {
 
 
     //log
-    debugImplementation 'com.github.eastar-dev.EastarLog2:log:-SNAPSHOT'
-    releaseImplementation 'com.github.eastar-dev.EastarLog2:logNoOp:-SNAPSHOT'
-    testImplementation 'com.github.eastar-dev.EastarLog2:logTest:-SNAPSHOT'
+    debugImplementation 'com.github.eastar-dev.EastarLog2:log:2.1.0'
+    releaseImplementation 'com.github.eastar-dev.EastarLog2:logNoOp:2.1.0'
+    testImplementation 'com.github.eastar-dev.EastarLog2:logTest:2.1.0'
     //ktx
-    implementation 'com.github.eastar-dev:EastarKtx:-SNAPSHOT'
+    implementation 'com.github.eastar-dev:EastarKtx:1.2.0'
 
     //hilt
     implementation 'com.google.dagger:hilt-android:2.33-beta'
@@ -70,6 +70,8 @@ dependencies {
 
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
+    //common
+    testImplementation project(':testCommon')
     //ViewModel Test
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     // Unit5 Tests on the JUnit Platform
@@ -82,7 +84,7 @@ dependencies {
     //Kotlin의 클래스는 기본이 final입니다. mocktio-inline을 추가해주거나 클래스를 open으로 선언해야 합니다.
 
 //    https://beomseok95.tistory.com/296
-//    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0" //Mockito-Kotlin
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0" //Mockito-Kotlin
 //    testImplementation 'org.hamcrest:hamcrest-all:1.3'
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -99,4 +101,6 @@ dependencies {
     // 5) The instrumentation test companion libraries
     androidTestImplementation "de.mannodermaus.junit5:android-test-core:1.2.2"
     androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:1.2.2"
+
+    testImplementation project(':testCommon')
 }

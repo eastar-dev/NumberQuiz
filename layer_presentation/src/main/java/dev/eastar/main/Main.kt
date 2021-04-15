@@ -1,12 +1,11 @@
-package dev.eastar.numberquiz
+package dev.eastar.main
 
 import android.log.LogActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
-import dev.eastar.numberquiz.main.MainFr
-import dev.eastar.numberquiz.main.MainViewModel
+import dev.eastar.presentation.R
 
 @AndroidEntryPoint
 class Main : LogActivity() {

@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.main
+package dev.eastar.main
 
 import android.log.LogFragment
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import dev.eastar.numberquiz.databinding.MainFrBinding
+import dev.eastar.presentation.databinding.MainFrBinding
 
 class MainFr : LogFragment() {
 

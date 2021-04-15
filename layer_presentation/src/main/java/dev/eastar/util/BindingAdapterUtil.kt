@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.util
+package dev.eastar.util
 
 import android.view.View
 import androidx.databinding.BindingAdapter

@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import dev.eastar.main.Main
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
@@ -26,7 +27,7 @@ class MainTest {
 
     @Rule
     @JvmField
-    var mActivityTestRule = activityScenarioRule<Main>()
+    var mActivityTestRule = activityScenarioRule<dev.eastar.main.Main>()
 
     @Test
     fun mainTest() {

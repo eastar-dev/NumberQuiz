@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.main
+package dev.eastar.main
 
 import android.log.Log
 import androidx.lifecycle.LiveData

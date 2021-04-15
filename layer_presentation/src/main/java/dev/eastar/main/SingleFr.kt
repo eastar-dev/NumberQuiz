@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.main
+package dev.eastar.main
 
 import android.log.Log
 import android.log.LogFragment
@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.eastar.ktx.alert
 import dev.eastar.ktx.hideKeyboard
 import dev.eastar.ktx.positiveButton
-import dev.eastar.numberquiz.databinding.SingleFrBinding
+import dev.eastar.presentation.databinding.SingleFrBinding
 
 @AndroidEntryPoint
 class SingleFr : LogFragment() {

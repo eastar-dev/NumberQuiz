@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="dev.eastar.numberquiz.main.MainViewModel" />
+            type="dev.eastar.main.MainViewModel" />
 
     </data>
 

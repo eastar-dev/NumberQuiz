@@ -7,7 +7,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import dev.eastar.numberquiz.Main
 import dev.eastar.numberquiz.R
 import org.junit.Rule
 import org.junit.Test
@@ -16,7 +15,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 internal class MainFrTest {
     @get:Rule
-    var activityScenarioRule = activityScenarioRule<Main>()
+    var activityScenarioRule = activityScenarioRule<dev.eastar.main.Main>()
 
     @Test
     fun onCreateView() {

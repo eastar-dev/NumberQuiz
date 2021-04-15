@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.main
+package dev.eastar.main
 
 import android.util.InstantExecutorExtension
 import android.util.mock

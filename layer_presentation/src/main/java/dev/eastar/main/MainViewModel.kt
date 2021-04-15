@@ -1,4 +1,4 @@
-package dev.eastar.numberquiz.main
+package dev.eastar.main
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData

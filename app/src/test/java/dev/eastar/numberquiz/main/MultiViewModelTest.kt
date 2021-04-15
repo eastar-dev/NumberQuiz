@@ -5,10 +5,9 @@ import android.util.getOrAwaitValue
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
-import dev.eastar.domain.TryNumberUseCase
-import dev.eastar.domain.TryNumberUseCaseImpl
-import dev.eastar.entity.GameResult
+import dev.eastar.entity.TryResultEntity
 import dev.eastar.repository.GameRepository
+import dev.eastar.usecase.TryNumberUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -44,7 +43,7 @@ class MultiViewModelTest {
         //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         Mockito.verify(gameRepository, Mockito.times(1)).generateRandomNumber()
 
-        tryNumberUseCase = TryNumberUseCaseImpl(gameRepository)
+        tryNumberUseCase = TryNumberUseCase(gameRepository)
     }
 
     @AfterEach
@@ -59,22 +58,22 @@ class MultiViewModelTest {
         //given
         val viewModel = MultiViewModel(tryNumberUseCase)
         //when
-        val observer = Observer<dev.eastar.entity.GameResult> {}
-        viewModel.gameResult.observeForever(observer)
+        val observer = Observer<TryResultEntity> {}
+        viewModel.TryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = "1"
         viewModel.tryNumber()
 
         try {
             //then
-            val gameResult = dev.eastar.entity.GameResult.low
-            val actual = viewModel.gameResult.value
+            val TryResultEntity = TryResultEntity.low
+            val actual = viewModel.TryResultEntity.value
             val actual2 = viewModel.gameEnd.value
-            assertThat(actual, CoreMatchers.`is`(gameResult))
+            assertThat(actual, CoreMatchers.`is`(TryResultEntity))
             assertThat(actual2, CoreMatchers.`is`(nullValue()))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.gameResult.removeObserver(observer)
+            viewModel.TryResultEntity.removeObserver(observer)
         }
     }
 
@@ -84,21 +83,21 @@ class MultiViewModelTest {
         //given
         val viewModel = MultiViewModel(tryNumberUseCase)
         //when
-        val observer = Observer<dev.eastar.entity.GameResult> {}
-        viewModel.gameResult.observeForever(observer)
+        val observer = Observer<TryResultEntity> {}
+        viewModel.TryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.setMembers("성춘향,변사또")
         viewModel.tryNumber()
 
         try {
             //then
-            val gameResult = dev.eastar.entity.GameResult.values()[result]
-            val actual = viewModel.gameResult.value
-            assertThat(actual, CoreMatchers.`is`(gameResult))
+            val TryResultEntity = TryResultEntity.values()[result]
+            val actual = viewModel.TryResultEntity.value
+            assertThat(actual, CoreMatchers.`is`(TryResultEntity))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.gameResult.removeObserver(observer)
+            viewModel.TryResultEntity.removeObserver(observer)
         }
     }
 

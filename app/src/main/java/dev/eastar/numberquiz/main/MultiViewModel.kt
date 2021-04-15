@@ -6,14 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.eastar.domain.TryNumberUseCase
-import dev.eastar.entity.GameResult
+import dev.eastar.entity.TryResultEntity
+import dev.eastar.usecase.TryNumberUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumberUseCase) : ViewModel() {
+class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumberUseCase) :
+    ViewModel() {
 
-    val gameResult = MutableLiveData<dev.eastar.entity.GameResult>()
+    val TryResultEntity = MutableLiveData<TryResultEntity>()
     val gameEnd = MutableLiveData<String>()
     val tryingNumber = MutableLiveData<String>()
 
@@ -41,29 +42,20 @@ class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumber
             value?.toInt()
         }.getOrNull()
         tryingNumber ?: return
+
         val case = tryNumberUseCase
-        val lowHigh = case.tryNumber(tryingNumber)
-        gameResult.value = lowHigh
-        if (lowHigh == GameResult.correct)
-            gameEnd.value = "축하합니다.\n승자는 ${case.winner} 입니다."
-        Log.w(gameResult.value)
+        val entity = case.tryNumber(tryingNumber)
+
+        TryResultEntity.value = entity.tryResult
+        if (entity.isEndGame)
+            gameEnd.value = "축하합니다.\n승자는 ${entity.winner} 입니다."
+        Log.w(TryResultEntity.value)
     }
 
     fun setMembers(membersText: String) {
         val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
-        //case1
         members.value = playerArray
-//        //case2
-//        members.postValue(playerArray)
-//        //case3
-//        Executors.newSingleThreadExecutor().execute {
-//            members.postValue(playerArray)
-//        }
-//        //case4
-//        viewModelScope.launch {
-//            members.postValue(playerArray)
-//        }
-        tryNumberUseCase.player = playerArray
+        tryNumberUseCase.setPlayers(playerArray)
     }
 }
 

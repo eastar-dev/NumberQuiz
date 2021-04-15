@@ -9,7 +9,7 @@
             name="viewmodel"
             type="dev.eastar.numberquiz.main.SingleViewModel" />
 
-        <import type="dev.eastar.entity.GameResult" />
+        <import type="dev.eastar.entity.TryResultEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toStartOf="@+id/high"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:select="@{viewmodel.gameResult == GameResult.low}" />
+            app:select="@{viewmodel.TryResultEntity == TryResultEntity.low}" />
 
         <TextView
             android:id="@+id/high"
@@ -47,7 +47,7 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/low"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/low"
-            app:select="@{viewmodel.gameResult == GameResult.high}" />
+            app:select="@{viewmodel.TryResultEntity == TryResultEntity.high}" />
 
 
         <androidx.appcompat.widget.AppCompatEditText

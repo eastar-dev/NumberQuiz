@@ -5,12 +5,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
-import dev.eastar.domain.TryNumberUseCase
-import dev.eastar.domain.TryNumberUseCaseImpl
 import dev.eastar.repository.GameRepository
 import dev.eastar.repository.GameRepositoryImpl
 import dev.eastar.source.GeneratorRandomNumberSource
 import dev.eastar.source.GeneratorRandomNumberSourceImpl
+import dev.eastar.usecase.TryNumberUseCase
 import javax.inject.Singleton
 
 
@@ -21,7 +20,7 @@ object TryNumberUseCaseModule {
     fun provideGameDomains(
         gameRepository: GameRepository
     ): TryNumberUseCase {
-        return TryNumberUseCaseImpl(gameRepository)
+        return TryNumberUseCase(gameRepository)
     }
 }
 

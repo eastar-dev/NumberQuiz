@@ -1,6 +1,6 @@
+include ':layer_presentation'
 include ':testCommon'
 include ':app'
-include ':domain'
-include ':entity'
-include ':repository'
+include ':layer_domain'
+include ':layer_data'
 rootProject.name = "numberQuiz"

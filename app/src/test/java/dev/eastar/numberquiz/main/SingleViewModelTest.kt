@@ -4,10 +4,9 @@ import android.util.InstantExecutorExtension
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
-import dev.eastar.domain.TryNumberUseCase
-import dev.eastar.domain.TryNumberUseCaseImpl
-import dev.eastar.entity.GameResult
+import dev.eastar.entity.TryResultEntity
 import dev.eastar.repository.GameRepository
+import dev.eastar.usecase.TryNumberUseCase
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,9 +35,8 @@ class SingleViewModelTest {
         //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         verify(gameRepository, times(1)).generateRandomNumber()
 
-        tryNumberUseCase = TryNumberUseCaseImpl(gameRepository)
+        tryNumberUseCase = TryNumberUseCase(gameRepository)
     }
-
 
     //https://greedy0110.tistory.com/57
     @Test
@@ -47,15 +45,15 @@ class SingleViewModelTest {
         val viewModel = SingleViewModel(tryNumberUseCase)
 
         //when
-        viewModel.gameResult.observeForever { }
+        viewModel.TryResultEntity.observeForever { }
         viewModel.gameEnd.observeForever {}
         viewModel.tryingNumber.value = "2"
         viewModel.tryNumber()
 
         //then
         assertAll({
-            val actual = viewModel.gameResult.value
-            assertThat(actual, `is`(dev.eastar.entity.GameResult.low))
+            val actual = viewModel.TryResultEntity.value
+            assertThat(actual, `is`(TryResultEntity.low))
         }, {
             val actual = viewModel.gameEnd.value
             assertThat(actual, `is`(nullValue()))
@@ -68,20 +66,20 @@ class SingleViewModelTest {
         //given
         val viewModel = SingleViewModel(tryNumberUseCase)
         //when
-        val observer = Observer<dev.eastar.entity.GameResult> {}
-        viewModel.gameResult.observeForever(observer)
+        val observer = Observer<TryResultEntity> {}
+        viewModel.TryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.tryNumber()
 
         try {
             //then
-            val gameResult = dev.eastar.entity.GameResult.values()[result]
-            val actual = viewModel.gameResult.value
-            assertThat(actual, `is`(gameResult))
+            val TryResultEntity = TryResultEntity.values()[result]
+            val actual = viewModel.TryResultEntity.value
+            assertThat(actual, `is`(TryResultEntity))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.gameResult.removeObserver(observer)
+            viewModel.TryResultEntity.removeObserver(observer)
         }
     }
 

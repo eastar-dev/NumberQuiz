@@ -1,10 +1,7 @@
 package dev.eastar.main
 
 import android.log.Log
-import android.util.InstantExecutorExtension
-import android.util.MainCoroutineExtension
-import android.util.mock
-import android.util.whenever
+import android.util.*
 import dev.eastar.repository.GameRepository
 import dev.eastar.usecase.TryNumberUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,6 +16,7 @@ import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantExecutorExtension::class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MultiViewModelCoroutineTest {
     private lateinit var tryNumberUseCase: TryNumberUseCase
 
@@ -38,12 +36,12 @@ class MultiViewModelCoroutineTest {
         Mockito.verify(gameRepository, Mockito.times(1)).generateRandomNumber()
         Log.e()
         tryNumberUseCase = TryNumberUseCase(gameRepository)
-        Log.e()
+        Log.e("end - setUp")
     }
 
     @AfterEach
     fun tearDown() {
-        Log.e()
+        Log.e("end - tearDown")
     }
 
     @Test
@@ -51,7 +49,10 @@ class MultiViewModelCoroutineTest {
     fun setMembersAsync() = coroutineExtension.runBlockingTest {
         Log.e()
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(
+            tryNumberUseCase,
+            coroutineExtension,
+        )
         viewModel.members.observeForever {}
         viewModel.memberInput.observeForever {}
         viewModel.members1Player.observeForever {}
@@ -59,7 +60,7 @@ class MultiViewModelCoroutineTest {
 
         //when
         viewModel.setMembersAsync("성춘향")
-//        delay(200)
+        //delay(2)
         Log.e()
 
 //        viewModel.viewModelScope.
@@ -84,6 +85,50 @@ class MultiViewModelCoroutineTest {
             Log.e()
         })
         Log.e()
+    }
+
+    @Test
+    @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
+    fun setMembersAsyncAwait()  {
+        Log.e()
+        //given
+        val viewModel = MultiViewModel(
+            tryNumberUseCase,
+            //coroutineExtension,
+        )
+        //viewModel.members.observeForever {}
+        //viewModel.memberInput.observeForever {}
+        //viewModel.members1Player.observeForever {}
+        Log.e()
+
+        //when
+        viewModel.setMembersAsync("성춘향")
+        //viewModel.members.observeForever{}
+        //delay(2)
+        Log.e()
+
+//        viewModel.viewModelScope.
+        //then
+        Log.tic(Thread.currentThread().id)
+        val actual = viewModel.members.getOrAwaitValue()
+        Log.tic(Thread.currentThread().id)
+        assertThat(actual, CoreMatchers.`is`(arrayOf("성춘향")))
+        Log.e()
+        //assertAll({
+        //}, {
+        //    Log.e()
+        //    val actual = viewModel.memberInput.getOrAwaitValue()
+        //    Log.e()
+        //    assertThat(actual, CoreMatchers.`is`(Unit))
+        //    Log.e()
+        //}, {
+        //    Log.e()
+        //    val actual = viewModel.members1Player.getOrAwaitValue()
+        //    Log.e()
+        //    assertThat(actual, `is`("멀티 게임에서는 2명 이상의 player가 필요합니다."))
+        //    Log.e()
+        //})
+        //Log.e()
     }
 
 }

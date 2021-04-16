@@ -5,14 +5,19 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.eastar.entity.TryResultEntity
 import dev.eastar.usecase.TryNumberUseCase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import javax.inject.Inject
 
+fun ViewModel.getViewModelScope(coroutineScope: CoroutineScope?) = coroutineScope ?: this.viewModelScope
+
 @HiltViewModel
-class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumberUseCase) :
-    ViewModel() {
+class MultiViewModel @Inject constructor(
+    private var tryNumberUseCase: TryNumberUseCase,
+    private val coroutineScopeProvider: CoroutineScope? = null,
+) : ViewModel() {
+    private val viewModelScope = getViewModelScope(coroutineScopeProvider)
 
     val TryResultEntity = MutableLiveData<TryResultEntity>()
     val gameEnd = MutableLiveData<String>()
@@ -59,10 +64,15 @@ class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumber
     }
 
     fun setMembersAsync(membersText: String) = viewModelScope.launch {
+        Log.w("start - setMembersAsync")
         delay(1)
+        Log.w("delay - setMembersAsync")
         val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
+        Log.w()
         members.value = playerArray
+        Log.w()
         tryNumberUseCase.setPlayers(playerArray)
+        Log.w("end - setMembersAsync")
     }
 }
 

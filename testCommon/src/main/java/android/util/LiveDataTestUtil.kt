@@ -18,6 +18,7 @@ package android.util
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import android.log.Log
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -31,29 +32,34 @@ import java.util.concurrent.TimeoutException
  * `InstantTaskExecutorRule` or a similar mechanism to execute tasks synchronously.
  */
 fun <T> LiveData<T>.getOrAwaitValue(
-    time: Long = 2,
+    time: Long = 2000,
     timeUnit: TimeUnit = TimeUnit.SECONDS,
     afterObserve: () -> Unit = {}
 ): T {
     var data: T? = null
     val latch = CountDownLatch(1)
+    Log.tic(Thread.currentThread().id)
     val observer = object : Observer<T> {
         override fun onChanged(o: T?) {
             data = o
+            Log.tic(Thread.currentThread().id)
             latch.countDown()
             this@getOrAwaitValue.removeObserver(this)
         }
     }
+    Log.tic(Thread.currentThread().id)
     this.observeForever(observer)
-
+    Log.tic(Thread.currentThread().id)
     afterObserve.invoke()
 
     // Don't wait indefinitely if the LiveData is not set.
+    Log.tic(Thread.currentThread().id)
     if (!latch.await(time, timeUnit)) {
+        Log.tic(Thread.currentThread().id)
         this.removeObserver(observer)
         throw TimeoutException("LiveData value was never set.")
     }
-
+    Log.tic()
     @Suppress("UNCHECKED_CAST")
     return data as T
 }

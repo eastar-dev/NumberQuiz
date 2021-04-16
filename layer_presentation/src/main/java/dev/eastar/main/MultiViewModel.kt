@@ -8,16 +8,13 @@ import dev.eastar.usecase.TryNumberUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 fun ViewModel.getViewModelScope(coroutineScope: CoroutineScope?) = coroutineScope ?: this.viewModelScope
 
 @HiltViewModel
-class MultiViewModel @Inject constructor(
-    private var tryNumberUseCase: TryNumberUseCase,
-    private val coroutineScopeProvider: CoroutineScope? = null,
-) : ViewModel() {
-    private val viewModelScope = getViewModelScope(coroutineScopeProvider)
+class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumberUseCase) : ViewModel() {
 
     val TryResultEntity = MutableLiveData<TryResultEntity>()
     val gameEnd = MutableLiveData<String>()
@@ -64,15 +61,26 @@ class MultiViewModel @Inject constructor(
     }
 
     fun setMembersAsync(membersText: String) = viewModelScope.launch {
-        Log.w("start - setMembersAsync")
-        delay(1)
-        Log.w("delay - setMembersAsync")
+        Log.w("\t\tstart - setMembersAsync")
+        Log.w("\t\tdelay start - setMembersAsync delay(1)")
+        delay(1000)
+        Log.w("\t\tdelay end - setMembersAsync delay(1)")
         val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
-        Log.w()
         members.value = playerArray
-        Log.w()
+        Log.w("\t\tend - setMembersAsync")
         tryNumberUseCase.setPlayers(playerArray)
-        Log.w("end - setMembersAsync")
+    }
+
+    fun setMembersExecutors(membersText: String) {
+        Executors.newSingleThreadExecutor().submit {
+            Log.w("start - setMembersAsync")
+            Thread.sleep(1_000)
+            Log.w("delay - setMembersAsync")
+            val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
+            Log.w("set membersText")
+            members.value = playerArray
+            Log.w("set membersText")
+            tryNumberUseCase.setPlayers(playerArray)
+        }
     }
 }
-

@@ -49,9 +49,9 @@ dependencies {
 
 
     //log
-    debugImplementation 'com.github.eastar-dev.EastarLog2:log:2.1.0'
-    releaseImplementation 'com.github.eastar-dev.EastarLog2:logNoOp:2.1.0'
-    testImplementation 'com.github.eastar-dev.EastarLog2:logTest:2.1.0'
+    debugImplementation 'com.github.eastar-dev.EastarLog2:log:2.1.1'
+    releaseImplementation 'com.github.eastar-dev.EastarLog2:logNoOp:2.1.1'
+    testImplementation 'com.github.eastar-dev.EastarLog2:logTest:2.1.1'
     //ktx
     implementation 'com.github.eastar-dev:EastarKtx:1.2.0'
 

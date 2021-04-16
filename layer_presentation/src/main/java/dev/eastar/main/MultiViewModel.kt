@@ -1,13 +1,13 @@
 package dev.eastar.main
 
 import android.log.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.eastar.entity.TryResultEntity
 import dev.eastar.usecase.TryNumberUseCase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,6 +53,13 @@ class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumber
     }
 
     fun setMembers(membersText: String) {
+        val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
+        members.value = playerArray
+        tryNumberUseCase.setPlayers(playerArray)
+    }
+
+    fun setMembersAsync(membersText: String) = viewModelScope.launch {
+        delay(1)
         val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
         members.value = playerArray
         tryNumberUseCase.setPlayers(playerArray)

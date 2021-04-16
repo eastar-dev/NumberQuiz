@@ -1,9 +1,7 @@
 plugins {
     id 'com.android.library'
 }
-
 apply from: '../base.gradle'
-
 dependencies {
     implementation project(':layer_domain')
 }

@@ -1,19 +1,13 @@
 package dev.eastar.main
 
 import android.util.InstantExecutorExtension
-import android.util.getOrAwaitValue
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
 import dev.eastar.entity.TryResultEntity
 import dev.eastar.repository.GameRepository
 import dev.eastar.usecase.TryNumberUseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
@@ -30,9 +24,6 @@ import org.mockito.Mockito
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantExecutorExtension::class)
 class MultiViewModelTest {
-    private val testDispatcher = TestCoroutineDispatcher()
-    private val testScope = TestCoroutineScope(testDispatcher)
-
     private lateinit var tryNumberUseCase: TryNumberUseCase
 
     @BeforeEach
@@ -46,34 +37,27 @@ class MultiViewModelTest {
         tryNumberUseCase = TryNumberUseCase(gameRepository)
     }
 
-    @AfterEach
-    fun exit() {
-        Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
-        testDispatcher.cleanupTestCoroutines()
-        testScope.cleanupTestCoroutines()
-    }
-
     @Test
     fun tryNumber() {
         //given
         val viewModel = MultiViewModel(tryNumberUseCase)
         //when
         val observer = Observer<TryResultEntity> {}
-        viewModel.TryResultEntity.observeForever(observer)
+        viewModel.tryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = "1"
         viewModel.tryNumber()
 
         try {
             //then
             val TryResultEntity = TryResultEntity.low
-            val actual = viewModel.TryResultEntity.value
+            val actual = viewModel.tryResultEntity.value
             val actual2 = viewModel.gameEnd.value
             assertThat(actual, CoreMatchers.`is`(TryResultEntity))
             assertThat(actual2, CoreMatchers.`is`(nullValue()))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.TryResultEntity.removeObserver(observer)
+            viewModel.tryResultEntity.removeObserver(observer)
         }
     }
 
@@ -84,7 +68,7 @@ class MultiViewModelTest {
         val viewModel = MultiViewModel(tryNumberUseCase)
         //when
         val observer = Observer<TryResultEntity> {}
-        viewModel.TryResultEntity.observeForever(observer)
+        viewModel.tryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.setMembers("성춘향,변사또")
         viewModel.tryNumber()
@@ -92,12 +76,12 @@ class MultiViewModelTest {
         try {
             //then
             val TryResultEntity = TryResultEntity.values()[result]
-            val actual = viewModel.TryResultEntity.value
+            val actual = viewModel.tryResultEntity.value
             assertThat(actual, CoreMatchers.`is`(TryResultEntity))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.TryResultEntity.removeObserver(observer)
+            viewModel.tryResultEntity.removeObserver(observer)
         }
     }
 
@@ -245,28 +229,5 @@ class MultiViewModelTest {
             assertThat(actual, CoreMatchers.`is`(Unit))
         })
     }
-
-    @Test
-    @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
-    fun setMembers_1player_case2() = testDispatcher.runBlockingTest {
-        //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
-
-        //when
-        viewModel.setMembers("성춘향")
-
-        //then
-        assertAll({
-            val actual = viewModel.members1Player.getOrAwaitValue()
-            assertThat(actual, `is`("멀티 게임에서는 2명 이상의 player가 필요합니다."))
-        }, {
-            val actual = viewModel.members.getOrAwaitValue()
-            assertThat(actual, CoreMatchers.`is`(arrayOf("성춘향")))
-        }, {
-            val actual = viewModel.memberInput.getOrAwaitValue()
-            assertThat(actual, CoreMatchers.`is`(Unit))
-        })
-    }
-
 }
 

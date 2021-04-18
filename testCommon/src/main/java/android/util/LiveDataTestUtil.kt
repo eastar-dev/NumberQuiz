@@ -19,6 +19,7 @@ package android.util
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import android.log.Log
+import java.util.*
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -56,7 +57,7 @@ fun <T> LiveData<T>.getOrAwaitValue(
         this.removeObserver(observer)
         throw TimeoutException("LiveData value was never set.")
     }
-    Log.e("return data")
+    Log.e("return data", (data as Array<String>).contentToString())
     @Suppress("UNCHECKED_CAST")
     return data as T
 }

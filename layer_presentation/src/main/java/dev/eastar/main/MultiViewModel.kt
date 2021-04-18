@@ -1,6 +1,7 @@
 package dev.eastar.main
 
 import android.log.Log
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.eastar.entity.TryResultEntity
@@ -16,7 +17,7 @@ fun ViewModel.getViewModelScope(coroutineScope: CoroutineScope?) = coroutineScop
 @HiltViewModel
 class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumberUseCase) : ViewModel() {
 
-    val TryResultEntity = MutableLiveData<TryResultEntity>()
+    val tryResultEntity = MutableLiveData<TryResultEntity>()
     val gameEnd = MutableLiveData<String>()
     val tryingNumber = MutableLiveData<String>()
 
@@ -48,10 +49,10 @@ class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumber
         val case = tryNumberUseCase
         val entity = case.tryNumber(tryingNumber)
 
-        TryResultEntity.value = entity.tryResult
+        tryResultEntity.value = entity.tryResult
         if (entity.isEndGame)
             gameEnd.value = "축하합니다.\n승자는 ${entity.winner} 입니다."
-        Log.w(TryResultEntity.value)
+        Log.w(tryResultEntity.value)
     }
 
     fun setMembers(membersText: String) {
@@ -71,16 +72,21 @@ class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumber
         tryNumberUseCase.setPlayers(playerArray)
     }
 
-    fun setMembersExecutors(membersText: String) {
-        Executors.newSingleThreadExecutor().submit {
-            Log.w("start - setMembersAsync")
-            Thread.sleep(1_000)
-            Log.w("delay - setMembersAsync")
-            val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
-            Log.w("set membersText")
-            members.value = playerArray
-            Log.w("set membersText")
-            tryNumberUseCase.setPlayers(playerArray)
-        }
+    fun setMembersExecutors(membersText: String) = Executors.newSingleThreadExecutor().submit(setMembersExecutorsRunner(membersText))
+
+    @VisibleForTesting
+    fun testSetMembersExecutorsRunner(membersText: String) = setMembersExecutorsRunner(membersText).run()
+
+    private fun setMembersExecutorsRunner(membersText: String) = Runnable {
+        Log.w("\t\tstart - setMembersAsync")
+        Thread.sleep(1_000)
+        Log.w("\t\tdelay - setMembersAsync")
+        val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
+        Log.w("\t\tset membersText")
+        members.value = playerArray
+        Log.w("\t\tset membersText")
+        tryNumberUseCase.setPlayers(playerArray)
     }
+
+
 }

@@ -16,14 +16,13 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 
 
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
-//    private val gameRepositoryMock: GameRepository by lazy { mock(GameRepository::class.java) }
-//    private val gameRepositorySpy: GameRepository by lazy { spy(GameRepository::class.java) }
+    //private val gameRepositoryMock: GameRepository by lazy { mock(GameRepository::class.java) }
+    //private val gameRepositorySpy: GameRepository by lazy { spy(GameRepository::class.java) }
 
     private lateinit var tryNumberUseCase: TryNumberUseCase
 
@@ -45,14 +44,14 @@ class SingleViewModelTest {
         val viewModel = SingleViewModel(tryNumberUseCase)
 
         //when
-        viewModel.TryResultEntity.observeForever { }
+        viewModel.tryResultEntity.observeForever { }
         viewModel.gameEnd.observeForever {}
         viewModel.tryingNumber.value = "2"
         viewModel.tryNumber()
 
         //then
         assertAll({
-            val actual = viewModel.TryResultEntity.value
+            val actual = viewModel.tryResultEntity.value
             assertThat(actual, `is`(TryResultEntity.low))
         }, {
             val actual = viewModel.gameEnd.value
@@ -67,19 +66,19 @@ class SingleViewModelTest {
         val viewModel = SingleViewModel(tryNumberUseCase)
         //when
         val observer = Observer<TryResultEntity> {}
-        viewModel.TryResultEntity.observeForever(observer)
+        viewModel.tryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.tryNumber()
 
         try {
             //then
             val TryResultEntity = TryResultEntity.values()[result]
-            val actual = viewModel.TryResultEntity.value
+            val actual = viewModel.tryResultEntity.value
             assertThat(actual, `is`(TryResultEntity))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.TryResultEntity.removeObserver(observer)
+            viewModel.tryResultEntity.removeObserver(observer)
         }
     }
 

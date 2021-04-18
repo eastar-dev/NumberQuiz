@@ -12,7 +12,7 @@ import javax.inject.Inject
 //이렇게 하면 presenter 여기서는 app 인데. domain 에 있는 모델만 쓰고 data 에 있는 모델을 사용하지 않는 구조로 만들수 있는데
 @HiltViewModel
 class SingleViewModel @Inject constructor(private var tryNumberUseCase: TryNumberUseCase) : ViewModel() {
-    val TryResultEntity = MutableLiveData<TryResultEntity>()
+    val tryResultEntity = MutableLiveData<TryResultEntity>()
     val gameEnd = MutableLiveData<String>()
     val tryingNumber = MutableLiveData<String>()
 
@@ -25,10 +25,10 @@ class SingleViewModel @Inject constructor(private var tryNumberUseCase: TryNumbe
         val case = tryNumberUseCase
         val entity = case.tryNumber(tryingNumber)
 
-        TryResultEntity.value = entity.tryResult
+        tryResultEntity.value = entity.tryResult
         if (entity.isEndGame)
             gameEnd.value = "축하합니다. 총시도 횟수는 ${entity.tryCount}번 입니다."
-        Log.w(TryResultEntity.value)
+        Log.w(tryResultEntity.value)
     }
 }
 

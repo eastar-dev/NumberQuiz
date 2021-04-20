@@ -72,6 +72,7 @@ class MultiViewModel @Inject constructor(private var tryNumberUseCase: TryNumber
         tryNumberUseCase.setPlayers(playerArray)
     }
 
+    @Suppress("HasPlatformType", "unused")
     fun setMembersExecutors(membersText: String) = Executors.newSingleThreadExecutor().submit(setMembersExecutorsRunner(membersText))
 
     @VisibleForTesting

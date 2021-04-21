@@ -4,9 +4,9 @@ import android.util.InstantExecutorExtension
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
-import dev.eastar.entity.TryResultEntity
+import dev.eastar.entity.RoundResultEntity
 import dev.eastar.repository.GameRepository
-import dev.eastar.usecase.TryNumberUseCase
+import dev.eastar.usecase.GameSingleRoundUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
@@ -24,7 +24,7 @@ import org.mockito.Mockito
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantExecutorExtension::class)
 class MultiViewModelTest {
-    private lateinit var tryNumberUseCase: TryNumberUseCase
+    private lateinit var gameSingleRoundUseCase: GameSingleRoundUseCase
 
     @BeforeEach
     fun setUp() {
@@ -34,22 +34,22 @@ class MultiViewModelTest {
         //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         Mockito.verify(gameRepository, Mockito.times(1)).generateRandomNumber()
 
-        tryNumberUseCase = TryNumberUseCase(gameRepository)
+        gameSingleRoundUseCase = GameSingleRoundUseCase(gameRepository)
     }
 
     @Test
     fun tryNumber() {
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(gameSingleRoundUseCase)
         //when
-        val observer = Observer<TryResultEntity> {}
+        val observer = Observer<RoundResultEntity> {}
         viewModel.tryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = "1"
         viewModel.tryNumber()
 
         try {
             //then
-            val TryResultEntity = TryResultEntity.low
+            val TryResultEntity = RoundResultEntity.LOW
             val actual = viewModel.tryResultEntity.value
             val actual2 = viewModel.gameEnd.value
             assertThat(actual, CoreMatchers.`is`(TryResultEntity))
@@ -65,9 +65,9 @@ class MultiViewModelTest {
     @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
     fun tryNumber(number: String, result: Int) {
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(gameSingleRoundUseCase)
         //when
-        val observer = Observer<TryResultEntity> {}
+        val observer = Observer<RoundResultEntity> {}
         viewModel.tryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.setMembers("성춘향,변사또")
@@ -75,7 +75,7 @@ class MultiViewModelTest {
 
         try {
             //then
-            val TryResultEntity = TryResultEntity.values()[result]
+            val TryResultEntity = RoundResultEntity.values()[result]
             val actual = viewModel.tryResultEntity.value
             assertThat(actual, CoreMatchers.`is`(TryResultEntity))
 
@@ -101,7 +101,7 @@ class MultiViewModelTest {
     @Test
     fun tryNumber_correct() {
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(gameSingleRoundUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -126,7 +126,7 @@ class MultiViewModelTest {
     @Test
     fun tryNumber_correct2() {
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(gameSingleRoundUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -154,7 +154,7 @@ class MultiViewModelTest {
     @DisplayName("""Multi에서 입력받은유저가""면 요청한다""")
     fun setMembers_empty(input: String) {
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(gameSingleRoundUseCase)
 
         //when
         viewModel.setMembers(input)
@@ -176,7 +176,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 시작시emptyplayer 요청")
     fun setMembers_empty() {
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(gameSingleRoundUseCase)
         //when
         val observer = Observer<Unit> { actual ->
             Assertions.assertEquals(Unit, actual)
@@ -193,7 +193,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 입력받은유저가>2면 입력요청안한다")
     fun setMembers_over2_member() {
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(gameSingleRoundUseCase)
         //when
         viewModel.setMembers("성춘향,변사또")
         val observer = Observer<Unit> { Assertions.fail() }
@@ -209,7 +209,7 @@ class MultiViewModelTest {
     @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
     fun setMembers_1player() {
         //given
-        val viewModel = MultiViewModel(tryNumberUseCase)
+        val viewModel = MultiViewModel(gameSingleRoundUseCase)
 
         //when
         viewModel.setMembers("성춘향")

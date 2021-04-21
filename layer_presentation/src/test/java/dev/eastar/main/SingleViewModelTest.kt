@@ -4,9 +4,9 @@ import android.util.InstantExecutorExtension
 import android.util.mock
 import android.util.whenever
 import androidx.lifecycle.Observer
-import dev.eastar.entity.TryResultEntity
+import dev.eastar.entity.RoundResultEntity
 import dev.eastar.repository.GameRepository
-import dev.eastar.usecase.TryNumberUseCase
+import dev.eastar.usecase.GameSingleRoundUseCase
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -25,7 +25,7 @@ class SingleViewModelTest {
 //    private val gameRepositoryMock: GameRepository by lazy { mock(GameRepository::class.java) }
 //    private val gameRepositorySpy: GameRepository by lazy { spy(GameRepository::class.java) }
 
-    private lateinit var tryNumberUseCase: TryNumberUseCase
+    private lateinit var gameSingleRoundUseCase: GameSingleRoundUseCase
 
     @BeforeEach
     fun setUp() {
@@ -35,14 +35,14 @@ class SingleViewModelTest {
         //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         verify(gameRepository, times(1)).generateRandomNumber()
 
-        tryNumberUseCase = TryNumberUseCase(gameRepository)
+        gameSingleRoundUseCase = GameSingleRoundUseCase(gameRepository)
     }
 
     //https://greedy0110.tistory.com/57
     @Test
     fun tryNumber() {
         //given
-        val viewModel = SingleViewModel(tryNumberUseCase)
+        val viewModel = SingleViewModel(gameSingleRoundUseCase)
 
         //when
         viewModel.TryResultEntity.observeForever { }
@@ -53,7 +53,7 @@ class SingleViewModelTest {
         //then
         assertAll({
             val actual = viewModel.TryResultEntity.value
-            assertThat(actual, `is`(TryResultEntity.low))
+            assertThat(actual, `is`(RoundResultEntity.LOW))
         }, {
             val actual = viewModel.gameEnd.value
             assertThat(actual, `is`(nullValue()))
@@ -64,16 +64,16 @@ class SingleViewModelTest {
     @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
     fun tryNumber(number: String, result: Int) {
         //given
-        val viewModel = SingleViewModel(tryNumberUseCase)
+        val viewModel = SingleViewModel(gameSingleRoundUseCase)
         //when
-        val observer = Observer<TryResultEntity> {}
+        val observer = Observer<RoundResultEntity> {}
         viewModel.TryResultEntity.observeForever(observer)
         viewModel.tryingNumber.value = number
         viewModel.tryNumber()
 
         try {
             //then
-            val TryResultEntity = TryResultEntity.values()[result]
+            val TryResultEntity = RoundResultEntity.values()[result]
             val actual = viewModel.TryResultEntity.value
             assertThat(actual, `is`(TryResultEntity))
 
@@ -99,7 +99,7 @@ class SingleViewModelTest {
     @Test
     fun tryNumber_correct() {
         //given
-        val viewModel = SingleViewModel(tryNumberUseCase)
+        val viewModel = SingleViewModel(gameSingleRoundUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -120,7 +120,7 @@ class SingleViewModelTest {
     @Test
     fun tryNumber_correct2() {
         //given
-        val viewModel = SingleViewModel(tryNumberUseCase)
+        val viewModel = SingleViewModel(gameSingleRoundUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)
@@ -143,7 +143,7 @@ class SingleViewModelTest {
     @Test
     fun tryNumber_correct3() {
         //given
-        val viewModel = SingleViewModel(tryNumberUseCase)
+        val viewModel = SingleViewModel(gameSingleRoundUseCase)
         //when
         val observer = Observer<String> {}
         viewModel.gameEnd.observeForever(observer)

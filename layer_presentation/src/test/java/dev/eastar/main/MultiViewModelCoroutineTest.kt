@@ -3,7 +3,7 @@ package dev.eastar.main
 import android.log.Log
 import android.util.*
 import dev.eastar.repository.GameRepository
-import dev.eastar.usecase.TryNumberUseCase
+import dev.eastar.usecase.GameSingleRoundUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,7 +17,7 @@ import org.mockito.Mockito
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantExecutorExtension::class)
 class MultiViewModelCoroutineTest {
-    private lateinit var tryNumberUseCase: TryNumberUseCase
+    private lateinit var gameSingleRoundUseCase: GameSingleRoundUseCase
 
     companion object {
         @JvmField
@@ -33,7 +33,7 @@ class MultiViewModelCoroutineTest {
         assertThat(gameRepository.generateRandomNumber(), CoreMatchers.`is`(5))
         //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         Mockito.verify(gameRepository, Mockito.times(1)).generateRandomNumber()
-        tryNumberUseCase = TryNumberUseCase(gameRepository)
+        gameSingleRoundUseCase = GameSingleRoundUseCase(gameRepository)
     }
 
     @AfterEach
@@ -47,7 +47,7 @@ class MultiViewModelCoroutineTest {
         Log.e("\tstart - setMembersAsyncTest")
         //given
         val viewModel = MultiViewModel(
-            tryNumberUseCase,
+            gameSingleRoundUseCase,
             //coroutineExtension,
         )
         viewModel.members.observeForever {}

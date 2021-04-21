@@ -9,7 +9,7 @@
             name="viewmodel"
             type="dev.eastar.main.MultiViewModel" />
 
-        <import type="dev.eastar.entity.TryResultEntity" />
+        <import type="dev.eastar.entity.RoundResultEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

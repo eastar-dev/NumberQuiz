@@ -15,6 +15,8 @@
  */
 package android.util
 
+import org.mockito.ArgumentCaptor
+import org.mockito.ArgumentMatchers.argThat
 import org.mockito.Mockito
 import org.mockito.stubbing.OngoingStubbing
 
@@ -25,4 +27,10 @@ inline fun <reified T> mock(): T = Mockito.mock(T::class.java)
 @Suppress("NOTHING_TO_INLINE")
 inline fun <T> whenever(methodCall: T): OngoingStubbing<T> = Mockito.`when`(methodCall)
 
-//inline fun <reified T> argumentCaptor(): ArgumentCaptor<T> = ArgumentCaptor.forClass(T::class.java)
+inline fun <reified T> argumentCaptor(): ArgumentCaptor<T> = ArgumentCaptor.forClass(T::class.java)
+fun <T> capture(argumentCaptor: ArgumentCaptor<T>): T = argumentCaptor.capture()
+
+//inline fun <reified T> capture(noinline consumer: (T) -> Unit): T {
+//    var times = 0
+//    return argThat { if (++times == 1) consumer(this); true }
+//}

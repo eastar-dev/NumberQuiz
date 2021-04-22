@@ -5,7 +5,7 @@ import android.util.InstantExecutorExtension
 import android.util.mock
 import android.util.whenever
 import dev.eastar.repository.GameRepository
-import dev.eastar.usecase.GameSingleRoundUseCase
+import dev.eastar.usecase.GameRoundUseCase
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.*
@@ -16,7 +16,7 @@ import java.util.*
 
 @ExtendWith(InstantExecutorExtension::class)
 class MultiViewModelExecutorsTest {
-    private lateinit var gameSingleRoundUseCase: GameSingleRoundUseCase
+    private lateinit var gameRoundUseCase: GameRoundUseCase
 
     @BeforeEach
     fun setUp() {
@@ -26,7 +26,7 @@ class MultiViewModelExecutorsTest {
         //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
         Mockito.verify(gameRepository, Mockito.times(1)).generateRandomNumber()
 
-        gameSingleRoundUseCase = GameSingleRoundUseCase(gameRepository)
+        gameRoundUseCase = GameRoundUseCase(gameRepository)
     }
 
     @AfterEach
@@ -38,7 +38,7 @@ class MultiViewModelExecutorsTest {
     @DisplayName("Multi에서 입력받은유저가1명이면 2명이상필요하다요청한다")
     fun setMembersAsyncAwait()  {
         //given
-        val viewModel = MultiViewModel(gameSingleRoundUseCase)
+        val viewModel = MultiViewModel(gameRoundUseCase)
 
         //when
         Log.e("\tgetOrAwaitValue")

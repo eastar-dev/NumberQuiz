@@ -4,8 +4,8 @@ import android.log.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.eastar.entity.RoundResultEntity
-import dev.eastar.usecase.GameSingleRoundUseCase
+import dev.eastar.entity.RoundResult
+import dev.eastar.usecase.GameRoundUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -15,9 +15,9 @@ import javax.inject.Inject
 fun ViewModel.getViewModelScope(coroutineScope: CoroutineScope?) = coroutineScope ?: this.viewModelScope
 
 @HiltViewModel
-class MultiViewModel @Inject constructor(private var gameSingleRoundUseCase: GameSingleRoundUseCase) : ViewModel() {
+class MultiViewModel @Inject constructor(private var gameRoundUseCase: GameRoundUseCase) : ViewModel() {
 
-    val tryResultEntity = MutableLiveData<RoundResultEntity>()
+    val tryResultEntity = MutableLiveData<RoundResult>()
     val gameEnd = MutableLiveData<String>()
     val tryingNumber = MutableLiveData<String>()
 
@@ -46,7 +46,7 @@ class MultiViewModel @Inject constructor(private var gameSingleRoundUseCase: Gam
         }.getOrNull()
         tryingNumber ?: return
 
-        val case = gameSingleRoundUseCase
+        val case = gameRoundUseCase
         val entity = case.tryNumber(tryingNumber)
 
         tryResultEntity.value = entity.tryResult
@@ -58,7 +58,7 @@ class MultiViewModel @Inject constructor(private var gameSingleRoundUseCase: Gam
     fun setMembers(membersText: String) {
         val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
         members.value = playerArray
-        gameSingleRoundUseCase.setPlayers(playerArray)
+        gameRoundUseCase.setPlayers(playerArray)
     }
 
     fun setMembersAsync(membersText: String) = viewModelScope.launch {
@@ -69,7 +69,7 @@ class MultiViewModel @Inject constructor(private var gameSingleRoundUseCase: Gam
         val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
         members.value = playerArray
         Log.w("\t\tend - setMembersAsync")
-        gameSingleRoundUseCase.setPlayers(playerArray)
+        gameRoundUseCase.setPlayers(playerArray)
     }
 
     fun setMembersExecutors(membersText: String) = Executors.newSingleThreadExecutor().submit(setMembersExecutorsRunner(membersText))
@@ -85,7 +85,7 @@ class MultiViewModel @Inject constructor(private var gameSingleRoundUseCase: Gam
         Log.w("\t\tset membersText")
         members.value = playerArray
         Log.w("\t\tset membersText")
-        gameSingleRoundUseCase.setPlayers(playerArray)
+        gameRoundUseCase.setPlayers(playerArray)
     }
 
 

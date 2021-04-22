@@ -1,5 +1,5 @@
 package dev.eastar.entity
 
-enum class RoundResultEntity {
+enum class RoundResult {
     LOW, CORRECT, HIGH,
 }

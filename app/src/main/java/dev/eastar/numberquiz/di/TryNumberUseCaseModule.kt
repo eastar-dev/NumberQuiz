@@ -9,7 +9,7 @@ import dev.eastar.repository.GameRepository
 import dev.eastar.repository.GameRepositoryImpl
 import dev.eastar.source.GeneratorRandomNumberSource
 import dev.eastar.source.GeneratorRandomNumberSourceImpl
-import dev.eastar.usecase.GameSingleRoundUseCase
+import dev.eastar.usecase.GameRoundUseCase
 import javax.inject.Singleton
 
 
@@ -19,8 +19,8 @@ object TryNumberUseCaseModule {
     @Provides
     fun provideGameDomains(
         gameRepository: GameRepository
-    ): GameSingleRoundUseCase {
-        return GameSingleRoundUseCase(gameRepository)
+    ): GameRoundUseCase {
+        return GameRoundUseCase(gameRepository)
     }
 }
 

@@ -1,8 +1,8 @@
 package dev.eastar.main
 
 import android.log.Log
-import android.util.InstantExecutorExtension
-import android.util.MainCoroutineExtension
+import junit.util.InstantExecutorExtension
+import junit.util.MainCoroutineExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat

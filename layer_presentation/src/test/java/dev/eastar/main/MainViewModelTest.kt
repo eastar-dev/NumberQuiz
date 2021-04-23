@@ -1,6 +1,6 @@
 package dev.eastar.main
 
-import android.util.InstantExecutorExtension
+import junit.util.InstantExecutorExtension
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import org.hamcrest.MatcherAssert.assertThat

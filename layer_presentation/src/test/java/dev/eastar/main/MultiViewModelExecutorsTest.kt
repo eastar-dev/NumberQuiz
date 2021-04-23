@@ -1,9 +1,9 @@
 package dev.eastar.main
 
 import android.log.Log
-import android.util.InstantExecutorExtension
-import android.util.mock
-import android.util.whenever
+import junit.util.InstantExecutorExtension
+import junit.util.mock
+import junit.util.whenever
 import dev.eastar.repository.GameRepository
 import dev.eastar.usecase.GameRoundUseCase
 import org.hamcrest.CoreMatchers

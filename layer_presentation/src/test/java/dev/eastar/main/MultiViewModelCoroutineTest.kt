@@ -4,6 +4,10 @@ import android.log.Log
 import android.util.*
 import dev.eastar.repository.GameRepository
 import dev.eastar.usecase.GameRoundUseCase
+import junit.util.InstantExecutorExtension
+import junit.util.MainCoroutineExtension
+import junit.util.mock
+import junit.util.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat

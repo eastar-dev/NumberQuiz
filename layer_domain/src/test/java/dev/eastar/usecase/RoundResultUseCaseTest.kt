@@ -1,6 +1,6 @@
 package dev.eastar.usecase
 
-import android.util.isit
+import junit.util.isit
 import dev.eastar.entity.GameEntity
 import dev.eastar.entity.RoundResult
 import org.hamcrest.MatcherAssert.assertThat
@@ -16,10 +16,10 @@ internal class RoundResultUseCaseTest {
     @DisplayName("Answer_낮은값 RoundResult.LOW")
     fun invoke_low() {
         //given
-        val game = GameEntity(5)
+        val game = GameEntity(ANSWER)
         val case = RoundResultUseCase()
         //when
-        case(game, 3)
+        case(game, LOW_ANSWER)
         val actual = game.roundResult
         //then
         assertThat(actual, isit(RoundResult.LOW))
@@ -29,10 +29,10 @@ internal class RoundResultUseCaseTest {
     @DisplayName("Answer_높은값 RoundResult.HIGH")
     fun invoke_high() {
         //given
-        val game = GameEntity(5)
+        val game = GameEntity(ANSWER)
         val case = RoundResultUseCase()
         //when
-        case(game, 6)
+        case(game, HIGH_ANSWER)
         val actual = game.roundResult
         //then
         assertThat(actual, isit(RoundResult.HIGH))
@@ -42,10 +42,10 @@ internal class RoundResultUseCaseTest {
     @DisplayName("Answer_정답을_넣으면 RoundResult.CORRECT")
     fun invoke_correct() {
         //given
-        val game = GameEntity(5)
+        val game = GameEntity(ANSWER)
         val case = RoundResultUseCase()
         //when
-        case(game, 5)
+        case(game, CORRECT_ANSWER)
         val actual = game.roundResult
         //then
         assertThat(actual, isit(RoundResult.CORRECT))

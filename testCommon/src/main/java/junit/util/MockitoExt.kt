@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.util
+package junit.util
 
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.argThat
 import org.mockito.Mockito
 import org.mockito.stubbing.OngoingStubbing
 
@@ -29,8 +28,3 @@ inline fun <T> whenever(methodCall: T): OngoingStubbing<T> = Mockito.`when`(meth
 
 inline fun <reified T> argumentCaptor(): ArgumentCaptor<T> = ArgumentCaptor.forClass(T::class.java)
 fun <T> capture(argumentCaptor: ArgumentCaptor<T>): T = argumentCaptor.capture()
-
-//inline fun <reified T> capture(noinline consumer: (T) -> Unit): T {
-//    var times = 0
-//    return argThat { if (++times == 1) consumer(this); true }
-//}

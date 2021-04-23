@@ -1,8 +1,8 @@
 package dev.eastar.main
 
-import android.util.InstantExecutorExtension
-import android.util.mock
-import android.util.whenever
+import junit.util.InstantExecutorExtension
+import junit.util.mock
+import junit.util.whenever
 import androidx.lifecycle.Observer
 import dev.eastar.entity.RoundResult
 import dev.eastar.repository.GameRepository

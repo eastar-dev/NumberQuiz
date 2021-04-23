@@ -1,4 +1,4 @@
-package android.util
+package junit.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

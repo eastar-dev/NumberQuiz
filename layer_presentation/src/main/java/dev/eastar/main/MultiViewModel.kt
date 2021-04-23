@@ -1,25 +1,25 @@
 package dev.eastar.main
 
 import android.log.Log
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.eastar.entity.RoundResult
-import dev.eastar.usecase.GameRoundUseCase
+import dev.eastar.usecase.MultiGameRoundUseCase
+import dev.eastar.usecase.MultiGameStartUseCase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 fun ViewModel.getViewModelScope(coroutineScope: CoroutineScope?) = coroutineScope ?: this.viewModelScope
 
 @HiltViewModel
-class MultiViewModel @Inject constructor(private var gameRoundUseCase: GameRoundUseCase) : ViewModel() {
+class MultiViewModel @Inject constructor(
+    private var multiGameStartUseCase: MultiGameStartUseCase,
+    private var multiGameRoundUseCase: MultiGameRoundUseCase
+) : ViewModel() {
 
-    val tryResultEntity = MutableLiveData<RoundResult>()
+    val roundResult = MutableLiveData<RoundResult>()
     val gameEnd = MutableLiveData<String>()
-    val tryingNumber = MutableLiveData<String>()
+    val guess = MutableLiveData<String>()
 
     val members = MutableLiveData<Array<String>>()
     val memberInput: LiveData<Unit> = Transformations.switchMap(members) {
@@ -35,58 +35,27 @@ class MultiViewModel @Inject constructor(private var gameRoundUseCase: GameRound
             null
     }
 
-
     init {
         setMembers("")
     }
 
     fun tryNumber() {
-        val tryingNumber = tryingNumber.runCatching {
+        val guess = guess.runCatching {
             value?.toInt()
         }.getOrNull()
-        tryingNumber ?: return
+        guess ?: return
 
-        val case = gameRoundUseCase
-        val entity = case.tryNumber(tryingNumber)
+        val entity = multiGameRoundUseCase(guess)
 
-        tryResultEntity.value = entity.tryResult
+        roundResult.value = entity.roundResult
         if (entity.isEndGame)
             gameEnd.value = "축하합니다.\n승자는 ${entity.winner} 입니다."
-        Log.w(tryResultEntity.value)
     }
 
     fun setMembers(membersText: String) {
-        val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
-        members.value = playerArray
-        gameRoundUseCase.setPlayers(playerArray)
+        val players = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
+        members.value = players
+        if (players.size >= 2)
+            multiGameStartUseCase(players)
     }
-
-    fun setMembersAsync(membersText: String) = viewModelScope.launch {
-        Log.w("\t\tstart - setMembersAsync")
-        Log.w("\t\tdelay start - setMembersAsync delay(1)")
-        delay(1000)
-        Log.w("\t\tdelay end - setMembersAsync delay(1)")
-        val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
-        members.value = playerArray
-        Log.w("\t\tend - setMembersAsync")
-        gameRoundUseCase.setPlayers(playerArray)
-    }
-
-    fun setMembersExecutors(membersText: String) = Executors.newSingleThreadExecutor().submit(setMembersExecutorsRunner(membersText))
-
-    @VisibleForTesting
-    fun testSetMembersExecutorsRunner(membersText: String) = setMembersExecutorsRunner(membersText).run()
-
-    private fun setMembersExecutorsRunner(membersText: String) = Runnable {
-        Log.w("\t\tstart - setMembersAsync")
-        Thread.sleep(1_000)
-        Log.w("\t\tdelay - setMembersAsync")
-        val playerArray = membersText.split(",").filter { it.isNotBlank() }.toTypedArray()
-        Log.w("\t\tset membersText")
-        members.value = playerArray
-        Log.w("\t\tset membersText")
-        gameRoundUseCase.setPlayers(playerArray)
-    }
-
-
 }

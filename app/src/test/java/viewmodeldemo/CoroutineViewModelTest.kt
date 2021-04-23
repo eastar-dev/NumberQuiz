@@ -1,4 +1,4 @@
-package dev.eastar.main
+package viewmodeldemo
 
 import android.log.Log
 import junit.util.InstantExecutorExtension

@@ -1,4 +1,4 @@
-package _demo
+package junit5demo
 
 import junit.util.argumentCaptor
 import junit.util.capture

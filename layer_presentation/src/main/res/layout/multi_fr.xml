@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toStartOf="@+id/high"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:select="@{viewmodel.tryResultEntity == TryResultEntity.low}" />
+            app:select="@{viewmodel.roundResult == TryResultEntity.low}" />
 
         <TextView
             android:id="@+id/high"
@@ -47,7 +47,7 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/low"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/low"
-            app:select="@{viewmodel.tryResultEntity == TryResultEntity.high}" />
+            app:select="@{viewmodel.roundResult == TryResultEntity.high}" />
 
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -58,7 +58,7 @@
             android:gravity="center"
             android:hint="1~100 사이의 숫자를 입력하세요"
             android:inputType="numberDecimal"
-            android:text="@={viewmodel.tryingNumber}"
+            android:text="@={viewmodel.guess}"
             android:textSize="24dp"
             app:layout_constraintBottom_toTopOf="@+id/confirm"
             app:layout_constraintEnd_toEndOf="parent"

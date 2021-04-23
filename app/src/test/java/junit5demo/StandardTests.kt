@@ -1,4 +1,4 @@
-package _demo
+package junit5demo
 
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assumptions.assumeTrue

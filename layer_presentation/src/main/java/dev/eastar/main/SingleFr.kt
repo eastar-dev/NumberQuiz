@@ -35,7 +35,7 @@ class SingleFr : LogFragment() {
     }
 
     private fun onLoadOnce() {
-        viewModel.gameEnd.observe(viewLifecycleOwner) {
+        viewModel.isEndGame.observe(viewLifecycleOwner) {
             hideKeyboard()
             alert(it) {
                 positiveButton("OK")
@@ -45,7 +45,7 @@ class SingleFr : LogFragment() {
 
         bb.tryingNumber.setOnEditorActionListener { v, actionId, event ->
             Log.e(v, actionId, event)
-            viewModel.tryNumber()
+            viewModel.round()
             bb.tryingNumber.setSelection(0, bb.tryingNumber.text.toString().length)
             true
         }

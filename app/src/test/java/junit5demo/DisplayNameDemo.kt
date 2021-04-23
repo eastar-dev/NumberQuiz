@@ -1,4 +1,4 @@
-package _demo
+package junit5demo
 
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName

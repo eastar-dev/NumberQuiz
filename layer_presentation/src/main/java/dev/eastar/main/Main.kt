@@ -24,10 +24,15 @@ class Main : LogActivity() {
             finish()
         }
 
-        viewModel.moveFragment.observe(this) { clz ->
-            android.log.Log.e(clz)
+        viewModel.moveSingleGame.observe(this) {
             supportFragmentManager.commit {
-                replace(R.id.container, clz.newInstance())
+                replace(R.id.container, SingleFr::class.java.newInstance())
+                addToBackStack(null)
+            }
+        }
+        viewModel.moveMultiGame.observe(this) {
+            supportFragmentManager.commit {
+                replace(R.id.container, MultiFr::class.java.newInstance())
                 addToBackStack(null)
             }
         }

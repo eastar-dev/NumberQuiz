@@ -45,17 +45,17 @@ class SingleViewModelTest {
         val viewModel = SingleViewModel(gameRoundUseCase)
 
         //when
-        viewModel.TryResultEntity.observeForever { }
-        viewModel.gameEnd.observeForever {}
-        viewModel.tryingNumber.value = "2"
-        viewModel.tryNumber()
+        viewModel.roundResult.observeForever { }
+        viewModel.isEndGame.observeForever {}
+        viewModel.guess.value = "2"
+        viewModel.round()
 
         //then
         assertAll({
-            val actual = viewModel.TryResultEntity.value
+            val actual = viewModel.roundResult.value
             assertThat(actual, `is`(RoundResult.LOW))
         }, {
-            val actual = viewModel.gameEnd.value
+            val actual = viewModel.isEndGame.value
             assertThat(actual, `is`(nullValue()))
         })
     }
@@ -67,19 +67,19 @@ class SingleViewModelTest {
         val viewModel = SingleViewModel(gameRoundUseCase)
         //when
         val observer = Observer<RoundResult> {}
-        viewModel.TryResultEntity.observeForever(observer)
-        viewModel.tryingNumber.value = number
-        viewModel.tryNumber()
+        viewModel.roundResult.observeForever(observer)
+        viewModel.guess.value = number
+        viewModel.round()
 
         try {
             //then
             val TryResultEntity = RoundResult.values()[result]
-            val actual = viewModel.TryResultEntity.value
+            val actual = viewModel.roundResult.value
             assertThat(actual, `is`(TryResultEntity))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.TryResultEntity.removeObserver(observer)
+            viewModel.roundResult.removeObserver(observer)
         }
     }
 
@@ -102,18 +102,18 @@ class SingleViewModelTest {
         val viewModel = SingleViewModel(gameRoundUseCase)
         //when
         val observer = Observer<String> {}
-        viewModel.gameEnd.observeForever(observer)
-        viewModel.tryingNumber.value = "5"
-        viewModel.tryNumber()
+        viewModel.isEndGame.observeForever(observer)
+        viewModel.guess.value = "5"
+        viewModel.round()
 
         try {
             //then
-            val actual = viewModel.gameEnd.value
+            val actual = viewModel.isEndGame.value
             assertThat(actual, `is`("축하합니다. 총시도 횟수는 1번 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.gameEnd.removeObserver(observer)
+            viewModel.isEndGame.removeObserver(observer)
         }
     }
 
@@ -123,20 +123,20 @@ class SingleViewModelTest {
         val viewModel = SingleViewModel(gameRoundUseCase)
         //when
         val observer = Observer<String> {}
-        viewModel.gameEnd.observeForever(observer)
+        viewModel.isEndGame.observeForever(observer)
         arrayOf("1", "5").forEach {
-            viewModel.tryingNumber.value = it
-            viewModel.tryNumber()
+            viewModel.guess.value = it
+            viewModel.round()
         }
 
         try {
             //then
-            val actual = viewModel.gameEnd.value
+            val actual = viewModel.isEndGame.value
             assertThat(actual, `is`("축하합니다. 총시도 횟수는 2번 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.gameEnd.removeObserver(observer)
+            viewModel.isEndGame.removeObserver(observer)
         }
     }
 
@@ -146,20 +146,20 @@ class SingleViewModelTest {
         val viewModel = SingleViewModel(gameRoundUseCase)
         //when
         val observer = Observer<String> {}
-        viewModel.gameEnd.observeForever(observer)
+        viewModel.isEndGame.observeForever(observer)
         arrayOf("1", "2", "5").forEach {
-            viewModel.tryingNumber.value = it
-            viewModel.tryNumber()
+            viewModel.guess.value = it
+            viewModel.round()
         }
 
         try {
             //then
-            val actual = viewModel.gameEnd.value
+            val actual = viewModel.isEndGame.value
             assertThat(actual, `is`("축하합니다. 총시도 횟수는 3번 입니다."))
 
         } finally {
             // Whatever happens, don't forget to remove the observer!
-            viewModel.gameEnd.removeObserver(observer)
+            viewModel.isEndGame.removeObserver(observer)
         }
     }
 }

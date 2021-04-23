@@ -4,31 +4,38 @@ import android.log.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.eastar.usecase.GameRoundUseCase
 import dev.eastar.entity.RoundResult
+import dev.eastar.usecase.GameRoundUseCase
+import dev.eastar.usecase.GameStartUseCase
 import javax.inject.Inject
 
 //app 에서는 domainModel 이 아닌 domainEntity 만 사용할 수 있도록 설계할 수 있을거 같아요
 //이렇게 하면 presenter 여기서는 app 인데. domain 에 있는 모델만 쓰고 data 에 있는 모델을 사용하지 않는 구조로 만들수 있는데
 @HiltViewModel
-class SingleViewModel @Inject constructor(private var gameRoundUseCase: GameRoundUseCase) : ViewModel() {
-    val TryResultEntity = MutableLiveData<RoundResult>()
-    val gameEnd = MutableLiveData<String>()
-    val tryingNumber = MutableLiveData<String>()
+class SingleViewModel @Inject constructor(
+    private var gameStartUseCase: GameStartUseCase,
+    private var gameRoundUseCase: GameRoundUseCase
+) : ViewModel() {
+    val roundResult = MutableLiveData<RoundResult>()
+    val isEndGame = MutableLiveData<String>()
+    val guess = MutableLiveData<String>()
 
-    fun tryNumber() {
-        val tryingNumber = tryingNumber.runCatching {
+    init {
+        gameStartUseCase()
+    }
+
+    fun round() {
+        val guess = guess.runCatching {
             value?.toInt()
         }.getOrNull()
-        tryingNumber ?: return
+        guess ?: return
 
-        val case = gameRoundUseCase
-        val entity = case.tryNumber(tryingNumber)
+        val entity = gameRoundUseCase(guess)
 
-        TryResultEntity.value = entity.tryResult
+        roundResult.value = entity.roundResult
         if (entity.isEndGame)
-            gameEnd.value = "축하합니다. 총시도 횟수는 ${entity.tryCount}번 입니다."
-        Log.w(TryResultEntity.value)
+            isEndGame.value = "축하합니다. 총시도 횟수는 ${entity.roundCount}번 입니다."
+        Log.w(roundResult.value)
     }
 }
 

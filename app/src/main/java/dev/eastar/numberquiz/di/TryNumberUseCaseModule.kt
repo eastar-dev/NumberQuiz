@@ -9,7 +9,10 @@ import dev.eastar.repository.GameRepository
 import dev.eastar.repository.GameRepositoryImpl
 import dev.eastar.source.GeneratorRandomNumberSource
 import dev.eastar.source.GeneratorRandomNumberSourceImpl
+import dev.eastar.source.LocalGameData
+import dev.eastar.source.LocalGameDataImpl
 import dev.eastar.usecase.GameRoundUseCase
+import dev.eastar.usecase.RoundResultUseCase
 import javax.inject.Singleton
 
 
@@ -18,9 +21,10 @@ import javax.inject.Singleton
 object TryNumberUseCaseModule {
     @Provides
     fun provideGameDomains(
-        gameRepository: GameRepository
+        gameRepository: GameRepository,
+        roundResultUseCase: RoundResultUseCase
     ): GameRoundUseCase {
-        return GameRoundUseCase(gameRepository)
+        return GameRoundUseCase(gameRepository, roundResultUseCase)
     }
 }
 
@@ -29,12 +33,22 @@ object TryNumberUseCaseModule {
 object GameRepositoryModule {
     @Provides
     fun provideGameRepository(
-        generatorRandomNumberSource: GeneratorRandomNumberSource
+        generatorRandomNumberSource: GeneratorRandomNumberSource,
+        localGameData: LocalGameData
     ): GameRepository {
-        return GameRepositoryImpl(generatorRandomNumberSource)
+        return GameRepositoryImpl(generatorRandomNumberSource, localGameData)
     }
 }
 
+@Module
+@InstallIn(SingletonComponent::class)
+object LocalGameDataModule {
+    @Singleton
+    @Provides
+    fun provideLocalGame(): LocalGameData {
+        return LocalGameDataImpl()
+    }
+}
 
 @Module
 @InstallIn(SingletonComponent::class)

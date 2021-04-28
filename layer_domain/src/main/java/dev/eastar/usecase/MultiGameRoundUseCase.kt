@@ -15,6 +15,5 @@ class MultiGameRoundUseCase(private val gameRoundUseCase: GameRoundUseCase) {
         }
         return game
     }
-
 }
 

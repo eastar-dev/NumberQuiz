@@ -35,7 +35,7 @@ class SingleFr : LogFragment() {
     }
 
     private fun onLoadOnce() {
-        viewModel.isEndGame.observe(viewLifecycleOwner) {
+        viewModel.endGameMsg.observe(viewLifecycleOwner) {
             hideKeyboard()
             alert(it) {
                 positiveButton("OK")

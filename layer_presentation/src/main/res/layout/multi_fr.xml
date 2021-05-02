@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toStartOf="@+id/high"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:select="@{viewmodel.roundResult == TryResultEntity.low}" />
+            app:select="@{viewmodel.roundResult == RoundResult.LOW}" />
 
         <TextView
             android:id="@+id/high"
@@ -47,7 +47,7 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/low"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/low"
-            app:select="@{viewmodel.roundResult == TryResultEntity.high}" />
+            app:select="@{viewmodel.roundResult == RoundResult.HIGH}" />
 
 
         <androidx.appcompat.widget.AppCompatEditText

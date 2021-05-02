@@ -50,14 +50,12 @@ fun <T> LiveData<T>.getOrAwaitValue(
     this.observeForever(observer)
     afterObserve.invoke()
 
-    // Don't wait indefinitely if the LiveData is not set.
-
     Log.e("latch.await")
     if (!latch.await(time, timeUnit)) {
         this.removeObserver(observer)
         throw TimeoutException("LiveData value was never set.")
     }
-    Log.e("return data", (data as Array<String>).contentToString())
+    Log.e("return data", data)
     @Suppress("UNCHECKED_CAST")
     return data as T
 }

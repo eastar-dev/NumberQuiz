@@ -1,165 +1,112 @@
 package dev.eastar.main
 
+import dev.eastar.entity.GameEntity
+import dev.eastar.entity.RoundResult
+import dev.eastar.usecase.GameRoundUseCase
+import dev.eastar.usecase.GameStartUseCase
 import junit.util.InstantExecutorExtension
+import junit.util.getOrAwaitValue
 import junit.util.mock
 import junit.util.whenever
-import androidx.lifecycle.Observer
-import dev.eastar.entity.RoundResult
-import dev.eastar.repository.GameRepository
-import dev.eastar.usecase.GameRoundUseCase
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
-import org.mockito.Mockito.times
+import org.mockito.Mockito
 import org.mockito.Mockito.verify
 
 
+@DisplayName("싱글게임에서 ")
 @ExtendWith(InstantExecutorExtension::class)
 class SingleViewModelTest {
-//    private val gameRepositoryMock: GameRepository by lazy { mock(GameRepository::class.java) }
-//    private val gameRepositorySpy: GameRepository by lazy { spy(GameRepository::class.java) }
+    private val gameStartUseCase: GameStartUseCase by lazy { mock() }
+    private val gameRoundUseCase: GameRoundUseCase by lazy { mock() }
 
-    private lateinit var gameRoundUseCase: GameRoundUseCase
 
-    @BeforeEach
-    fun setUp() {
-        val gameRepository: GameRepository by lazy { mock() }
-        whenever(gameRepository.generateRandomNumber()).thenReturn(5)
-        assertThat(gameRepository.generateRandomNumber(), `is`(5))
-        //https://velog.io/@dnjscksdn98/JUnit-Mockito-Verify-Method-Calls
-        verify(gameRepository, times(1)).generateRandomNumber()
+    @Test
+    @DisplayName("시작시 gameStartUseCase()가 호출된다.")
+    fun initTest() {
+        //given
+        SingleViewModel(gameStartUseCase, gameRoundUseCase)
 
-        gameRoundUseCase = GameRoundUseCase(gameRepository)
+        //when
+        whenever(gameStartUseCase.invoke()).thenAnswer {}
+
+        //then
+        verify(gameStartUseCase, Mockito.times(1)).invoke()
     }
 
     //https://greedy0110.tistory.com/57
     @Test
-    fun tryNumber() {
+    @DisplayName("round LOW_ANSWER면 roundResult:LOW")
+    fun round_LOW_ANSWER_Test() {
         //given
-        val viewModel = SingleViewModel(gameRoundUseCase)
+        val viewModel = SingleViewModel(gameStartUseCase, gameRoundUseCase)
+        whenever(gameRoundUseCase.invoke(LOW_ANSWER)).thenReturn(GameEntity(LOW_ANSWER).apply {
+            roundResult = RoundResult.LOW
+        })
 
         //when
-        viewModel.roundResult.observeForever { }
-        viewModel.isEndGame.observeForever {}
-        viewModel.guess.value = "2"
+        viewModel.guess.value = "" + LOW_ANSWER
+        viewModel.round()
+
+        //then
+        //assertAll({
+        val actual = viewModel.roundResult.getOrAwaitValue()
+        assertThat(actual, `is`(RoundResult.LOW))
+        //}, {
+        //    val actual = viewModel.isEndGame.getOrAwaitValue()
+        //    assertThat(actual, `is`(nullValue()))
+        //})
+    }
+
+    @Test
+    @DisplayName("round HIGH_ANSWER roundResult:HIGH")
+    fun round_HIGH_ANSWER_Test() {
+        //given
+        val viewModel = SingleViewModel(gameStartUseCase, gameRoundUseCase)
+        whenever(gameRoundUseCase.invoke(HIGH_ANSWER)).thenReturn(GameEntity(HIGH_ANSWER).apply {
+            roundResult = RoundResult.HIGH
+        })
+
+        //when
+        viewModel.guess.value = "" + HIGH_ANSWER
+        viewModel.round()
+
+        //then
+        //assertAll({
+        val actual = viewModel.roundResult.getOrAwaitValue()
+        assertThat(actual, `is`(RoundResult.HIGH))
+        //}, {
+        //    val actual = viewModel.isEndGame.getOrAwaitValue()
+        //    assertThat(actual, `is`(nullValue()))
+        //})
+    }
+
+    @Test
+    @DisplayName("round CORRECT_ANSWER roundResult:CORRECT and ")
+    fun round_CORRECT_Test() {
+        //given
+        val viewModel = SingleViewModel(gameStartUseCase, gameRoundUseCase)
+        whenever(gameRoundUseCase.invoke(CORRECT_ANSWER)).thenReturn(GameEntity(CORRECT_ANSWER).apply {
+            roundResult = RoundResult.CORRECT
+            isEndGame = true
+            roundCount = 1
+        })
+
+        //when
+        viewModel.guess.value = "" + CORRECT_ANSWER
         viewModel.round()
 
         //then
         assertAll({
-            val actual = viewModel.roundResult.value
-            assertThat(actual, `is`(RoundResult.LOW))
+            val actual = viewModel.roundResult.getOrAwaitValue()
+            assertThat(actual, `is`(RoundResult.CORRECT))
         }, {
-            val actual = viewModel.isEndGame.value
-            assertThat(actual, `is`(nullValue()))
-        })
-    }
-
-    @ParameterizedTest
-    @CsvSource(value = ["1,0", "3,0", "5,1", "7,2", "9,2"])
-    fun tryNumber(number: String, result: Int) {
-        //given
-        val viewModel = SingleViewModel(gameRoundUseCase)
-        //when
-        val observer = Observer<RoundResult> {}
-        viewModel.roundResult.observeForever(observer)
-        viewModel.guess.value = number
-        viewModel.round()
-
-        try {
-            //then
-            val TryResultEntity = RoundResult.values()[result]
-            val actual = viewModel.roundResult.value
-            assertThat(actual, `is`(TryResultEntity))
-
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            viewModel.roundResult.removeObserver(observer)
-        }
-    }
-
-    //    @ValueSource(ints = [1,3,5,7,9])
-//    @ParameterizedTest
-//    @CsvSource(value = ["1,-1", "3,-1", "5,0", "7,+1", "9,+1"])
-//    fun signmunTest(number: Int, result: Int) {
-//        //given
-//        val viewModel = SingleViewModel(tryNumberUseCase)
-//        //when
-//        val actual = signumTest(number)
-//        //then
-//        assertThat(actual, `is`(result))
-//
-//    }
-
-    @Test
-    fun tryNumber_correct() {
-        //given
-        val viewModel = SingleViewModel(gameRoundUseCase)
-        //when
-        val observer = Observer<String> {}
-        viewModel.isEndGame.observeForever(observer)
-        viewModel.guess.value = "5"
-        viewModel.round()
-
-        try {
-            //then
-            val actual = viewModel.isEndGame.value
+            val actual = viewModel.endGameMsg.getOrAwaitValue()
             assertThat(actual, `is`("축하합니다. 총시도 횟수는 1번 입니다."))
-
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            viewModel.isEndGame.removeObserver(observer)
-        }
-    }
-
-    @Test
-    fun tryNumber_correct2() {
-        //given
-        val viewModel = SingleViewModel(gameRoundUseCase)
-        //when
-        val observer = Observer<String> {}
-        viewModel.isEndGame.observeForever(observer)
-        arrayOf("1", "5").forEach {
-            viewModel.guess.value = it
-            viewModel.round()
-        }
-
-        try {
-            //then
-            val actual = viewModel.isEndGame.value
-            assertThat(actual, `is`("축하합니다. 총시도 횟수는 2번 입니다."))
-
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            viewModel.isEndGame.removeObserver(observer)
-        }
-    }
-
-    @Test
-    fun tryNumber_correct3() {
-        //given
-        val viewModel = SingleViewModel(gameRoundUseCase)
-        //when
-        val observer = Observer<String> {}
-        viewModel.isEndGame.observeForever(observer)
-        arrayOf("1", "2", "5").forEach {
-            viewModel.guess.value = it
-            viewModel.round()
-        }
-
-        try {
-            //then
-            val actual = viewModel.isEndGame.value
-            assertThat(actual, `is`("축하합니다. 총시도 횟수는 3번 입니다."))
-
-        } finally {
-            // Whatever happens, don't forget to remove the observer!
-            viewModel.isEndGame.removeObserver(observer)
-        }
+        })
     }
 }
